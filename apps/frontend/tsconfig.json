@@ -7,7 +7,14 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@app/*": ["apps/frontend/src/app/*"],
+      "@core/*": ["apps/frontend/src/app/core/*"],
+      "@models/*": ["apps/frontend/src/app/core/models/*"],
+      "@features/*": ["apps/frontend/src/app/features/*"],
+      "@services/*": ["apps/frontend/src/app/core/services/*"]
+    }
   },
   "files": [],
   "include": [],

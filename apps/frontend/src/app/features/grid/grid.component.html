@@ -12,7 +12,7 @@
   </div>
 
   <div *ngIf="grid.length; else emptyGrid" class="grid">
-    <div class="row" *ngFor="let row of grid">
+    <div *ngFor="let row of grid">
       <div class="cell" *ngFor="let cell of row">{{ cell }}</div>
     </div>
   </div>

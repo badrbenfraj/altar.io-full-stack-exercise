@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { GridService } from './services/grid.service';
 
 @Controller('grid')
@@ -11,9 +11,8 @@ export class GridController {
     return grid;
   }
 
-  @Get('code')
-  getCode(): string {
-    const grid = this.getGrid();
+  @Post('code')
+  getCode(@Body() grid): string {
     const code = this.gridService.generateCode(grid);
     return code;
   }

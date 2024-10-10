@@ -1,36 +1,43 @@
-import { Component } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { forkJoin, fromEvent, interval } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { Component, inject } from '@angular/core';
+import { forkJoin, interval, of } from 'rxjs';
+import { switchMap, take, takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ScreenComponent } from '@core/screens/screen.component';
+import { GridService } from '@services/grid.service';
 
 @Component({
   selector: 'app-grid',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule],
+  imports: [CommonModule, FormsModule],
   providers: [],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
 })
-export class GridComponent {
+export class GridComponent extends ScreenComponent {
+  gridService = inject(GridService);
+
   grid: string[][] = [];
+
   code = '';
+
   generationStarted = false;
+
   character = '';
 
-  constructor(private http: HttpClient) {}
-
   generateGrid(): void {
+    if (this.generationStarted) return;
     this.generationStarted = true;
     interval(1000)
       .pipe(
-        switchMap(() =>
+        switchMap(this.getGrid),
+        switchMap((grid) =>
           forkJoin({
-            grid: this.http.get<any>('/api/grid'),
-            code: this.http.get<any>('/api/grid/code')
+            grid: of(grid),
+            code: this.getSecretCode(grid)
           })
-        )
+        ),
+        takeUntil(this.destroy$)
       )
       .subscribe({
         next: ({ grid, code }) => {
@@ -42,4 +49,8 @@ export class GridComponent {
         }
       });
   }
+
+  getGrid = () => this.gridService.getGrid();
+
+  getSecretCode = (grid: string[][]) => this.gridService.getSecretCode(grid);
 }
