@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { fromEvent, interval } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { forkJoin, fromEvent, interval } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -15,8 +15,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class GridComponent {
   grid: string[][] = [];
+  code = '';
   generationStarted = false;
-  character = ''
+  character = '';
 
   constructor(private http: HttpClient) {}
 
@@ -24,10 +25,21 @@ export class GridComponent {
     this.generationStarted = true;
     interval(1000)
       .pipe(
-        switchMap(() => this.http.get<any>('/api/grid'))
+        switchMap(() =>
+          forkJoin({
+            grid: this.http.get<any>('/api/grid'),
+            code: this.http.get<any>('/api/grid/code')
+          })
+        )
       )
-      .subscribe(response => {
-        this.grid = response.grid;
+      .subscribe({
+        next: ({ grid, code }) => {
+          this.grid = grid;
+          this.code = code;
+        },
+        error: () => {
+          this.generationStarted = false;
+        }
       });
   }
 }

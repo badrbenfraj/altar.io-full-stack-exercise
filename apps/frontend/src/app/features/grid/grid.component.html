@@ -5,7 +5,8 @@
       <input id="characterInput" type="text" maxlength="1" [(ngModel)]="character" class="input-character" />
     </div>
     <div class="clock">
-      <i class="fas fa-clock"></i> <!-- Clock icon -->
+      <i class="fas fa-clock"></i>
+      <!-- Clock icon -->
     </div>
     <button (click)="generateGrid()" [disabled]="generationStarted" class="generate-btn">Generate 2D Grid</button>
   </div>
@@ -18,18 +19,17 @@
 
   <ng-template #emptyGrid>
     <div class="grid">
-      <div class="cell" *ngFor="let row of [].constructor(100); let i = index">
-
-      </div>
+      <div class="cell" *ngFor="let row of [].constructor(100); let i = index"></div>
     </div>
   </ng-template>
 
   <div class="code-section">
     <span class="status-live">
-      <span class="live-dot"></span> LIVE
+      <span class="live-dot" [ngClass]="{ active: generationStarted }"></span>
+      LIVE
     </span>
     <div class="code-display">
-      <span>Your Code: </span>
+      <span>Your Code: {{ code }}</span>
     </div>
   </div>
 </div>

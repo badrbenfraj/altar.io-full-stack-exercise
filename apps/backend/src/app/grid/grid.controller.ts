@@ -6,8 +6,15 @@ export class GridController {
   constructor(private readonly gridService: GridService) {}
 
   @Get('')
-  getGrid(): { grid: string[][] } {
+  getGrid(): string[][] {
     const grid = this.gridService.generateRandomGrid();
-    return { grid };
+    return grid;
+  }
+
+  @Get('code')
+  getCode(): string {
+    const grid = this.getGrid();
+    const code = this.gridService.generateCode(grid);
+    return code;
   }
 }

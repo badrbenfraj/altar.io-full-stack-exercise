@@ -77,9 +77,12 @@
     justify-content: center;
 
     .live-dot {
+      &.active {
+        background-color: red;
+      }
       height: 8px;
       width: 8px;
-      background-color: red;
+      background-color: #000;
       border-radius: 50%;
       display: inline-block;
       margin-right: 5px;
