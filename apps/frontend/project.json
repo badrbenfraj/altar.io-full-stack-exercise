@@ -22,7 +22,11 @@
             "input": "apps/frontend/public"
           }
         ],
-        "styles": ["apps/frontend/src/styles.scss"],
+        "styles": [
+          "node_modules/bootstrap/dist/css/bootstrap-grid.min.css",
+          "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+          "apps/frontend/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -59,7 +63,11 @@
           "buildTarget": "frontend:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "proxyConfig": "apps/frontend/proxy.conf.json",
+        "port": 4200
+      }
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
