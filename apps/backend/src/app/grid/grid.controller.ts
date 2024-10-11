@@ -1,13 +1,13 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { GridService } from './services/grid.service';
 
 @Controller('grid')
 export class GridController {
   constructor(private readonly gridService: GridService) {}
 
-  @Get('')
-  getGrid(): string[][] {
-    const grid = this.gridService.generateRandomGrid();
+  @Get()
+  getGrid(@Query('bias') bias?: string): string[][] {
+    const grid = this.gridService.generateRandomGrid(bias);
     return grid;
   }
 

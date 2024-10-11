@@ -13,7 +13,8 @@
       "@core/*": ["apps/frontend/src/app/core/*"],
       "@models/*": ["apps/frontend/src/app/core/models/*"],
       "@features/*": ["apps/frontend/src/app/features/*"],
-      "@services/*": ["apps/frontend/src/app/core/services/*"]
+      "@services/*": ["apps/frontend/src/app/core/services/*"],
+      "@helpers": ["libs/helpers/src/index.ts"]
     }
   },
   "files": [],

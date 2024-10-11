@@ -25,6 +25,8 @@ export class GridComponent extends ScreenComponent {
 
   character = '';
 
+  inputDisabled = false;
+
   generateGrid(): void {
     if (this.generationStarted) return;
     this.generationStarted = true;
@@ -46,11 +48,45 @@ export class GridComponent extends ScreenComponent {
         },
         error: () => {
           this.generationStarted = false;
+          this.inputDisabled = false;
         }
       });
+
+    if (this.character.length === 1) {
+      this.disableInput();
+    }
   }
 
-  getGrid = () => this.gridService.getGrid();
+  alphabetsOnly(event: KeyboardEvent): boolean {
+    const key = event.key;
+
+    const isDeleteKey = key === 'Backspace' || key === 'Delete';
+
+    const isAlphabet = /[a-z]/i.test(key);
+
+    if (isAlphabet && !isDeleteKey) {
+      if (this.generationStarted) {
+        this.disableInput();
+      }
+      return true;
+    }
+
+    return isDeleteKey;
+  }
+
+  disableInput(): void {
+    this.inputDisabled = true;
+
+    setTimeout(() => {
+      this.inputDisabled = false;
+    }, 4000);
+  }
+
+  isCharacterReadOnly(): boolean {
+    return this.inputDisabled;
+  }
+
+  getGrid = () => this.gridService.getGrid(this.character);
 
   getSecretCode = (grid: string[][]) => this.gridService.getSecretCode(grid);
 }

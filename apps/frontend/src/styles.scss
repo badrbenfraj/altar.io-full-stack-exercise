@@ -1,9 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-table {
-  border-collapse: collapse;
-  td {
-    border: 1px solid #000;
-    padding: 10px;
-    text-align: center;
-  }
+:root {
+  --primary-color: #607d8b;
 }

@@ -2,7 +2,16 @@
   <div class="header">
     <div class="input-group">
       <label for="characterInput">Character</label>
-      <input id="characterInput" type="text" maxlength="1" [(ngModel)]="character" class="input-character" />
+      <input
+        id="characterInput"
+        type="text"
+        maxlength="1"
+        placeholder="Character"
+        [(ngModel)]="character"
+        [disabled]="isCharacterReadOnly()"
+        class="input-character"
+        (keydown)="alphabetsOnly($event)"
+      />
     </div>
     <div class="clock">
       <i class="fas fa-clock"></i>
