@@ -1,5 +1,4 @@
-import { OnDestroy } from '@angular/core';
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 /**
  * This class is the parent class of all components.
