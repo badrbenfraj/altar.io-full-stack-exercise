@@ -1,16 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { forkJoin, interval, of } from 'rxjs';
 import { switchMap, take, takeUntil } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { ScreenComponent } from '@core/screens/screen.component';
 import { GridService } from '@services/grid.service';
-import { LiveComponent } from '@ui/components';
+import { SharedModule } from '@app/shared/shared.module';
 
 @Component({
   selector: 'ac-grid',
   standalone: true,
-  imports: [CommonModule, FormsModule, LiveComponent],
+  imports: [SharedModule],
   providers: [],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
