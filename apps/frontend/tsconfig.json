@@ -15,7 +15,7 @@
       "@features/*": ["apps/frontend/src/app/features/*"],
       "@services/*": ["apps/frontend/src/app/core/services/*"],
       "@ui/components": ["libs/components/src/index.ts"],
-      "@helpers": ["libs/helpers/src/index.ts"]
+      "@helpers/*": ["libs/helpers/src/lib/*"]
     }
   },
   "files": [],

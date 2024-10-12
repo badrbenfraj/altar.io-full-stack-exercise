@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { countOccurrences, shuffleArray } from '@helpers';
+import { countOccurrences, shuffleArray } from '@helpers/utils';
 
 @Injectable()
 export class GridService {

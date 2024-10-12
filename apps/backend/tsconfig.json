@@ -14,7 +14,7 @@
     "esModuleInterop": true,
     "paths": {
       "@app/*": ["apps/backend/src/app/*"],
-      "@helpers": ["libs/helpers/src/index.ts"]
+      "@helpers/*": ["libs/helpers/src/lib/*"]
     }
   }
 }

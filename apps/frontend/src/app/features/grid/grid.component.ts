@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { forkJoin, interval, of } from 'rxjs';
-import { switchMap, take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ScreenComponent } from '@core/screens/screen.component';
 import { GridService } from '@services/grid.service';
 import { SharedModule } from '@app/shared/shared.module';
+import { startGridGeneration } from '@helpers/utils';
 
 @Component({
   selector: 'ac-grid',
@@ -29,17 +29,9 @@ export class GridComponent extends ScreenComponent {
   generateGrid(): void {
     if (this.generationStarted) return;
     this.generationStarted = true;
-    interval(1000)
-      .pipe(
-        switchMap(this.getGrid),
-        switchMap((grid) =>
-          forkJoin({
-            grid: of(grid),
-            code: this.getSecretCode(grid)
-          })
-        ),
-        takeUntil(this.destroy$)
-      )
+
+    startGridGeneration(this.gridService, () => this.character)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: ({ grid, code }) => {
           this.grid = grid;
@@ -84,8 +76,4 @@ export class GridComponent extends ScreenComponent {
   isCharacterReadOnly(): boolean {
     return this.inputDisabled;
   }
-
-  getGrid = () => this.gridService.getGrid(this.character);
-
-  getSecretCode = (grid: string[][]) => this.gridService.getSecretCode(grid);
 }
