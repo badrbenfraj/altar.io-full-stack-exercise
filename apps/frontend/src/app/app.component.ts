@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { GridComponent } from './features/grid/grid.component';
+import { SharedModule } from './shared/shared.module';
 
 @Component({
   standalone: true,
-  imports: [GridComponent, RouterModule],
-  selector: 'app-root',
+  imports: [SharedModule],
+  selector: 'ac-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

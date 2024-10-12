@@ -1,6 +1,6 @@
 <div class="container">
   <div class="header">
-    <div class="input-group">
+    <div class="input-wrapper col col-md-2">
       <label for="characterInput">Character</label>
       <input
         id="characterInput"
@@ -17,7 +17,7 @@
       <i class="fas fa-clock"></i>
       <!-- Clock icon -->
     </div>
-    <button (click)="generateGrid()" [disabled]="generationStarted" class="generate-btn">Generate 2D Grid</button>
+    <button (click)="generateGrid()" [disabled]="generationStarted" class="col-md-2 generate-btn">Generate 2D Grid</button>
   </div>
 
   <div *ngIf="grid.length; else emptyGrid" class="grid">
@@ -32,13 +32,5 @@
     </div>
   </ng-template>
 
-  <div class="code-section">
-    <span class="status-live">
-      <span class="live-dot" [ngClass]="{ active: generationStarted }"></span>
-      LIVE
-    </span>
-    <div class="code-display">
-      <span>Your Code: {{ code }}</span>
-    </div>
-  </div>
+  <ac-live [code]="code" [generationStarted]="generationStarted"></ac-live>
 </div>

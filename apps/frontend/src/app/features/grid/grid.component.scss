@@ -17,7 +17,7 @@
   margin-bottom: 10px;
 }
 
-.input-group {
+.input-wrapper {
   display: flex;
   flex-direction: column;
 
@@ -29,9 +29,9 @@
 
   .input-character {
     padding: 10px;
-    width: 100px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    width: 100%;
   }
 }
 
@@ -66,40 +66,4 @@
   font-size: 18px;
   min-height: 45px;
   min-width: 45px;
-}
-
-.code-section {
-  text-align: center;
-  margin-top: 18px;
-
-  .status-live {
-    font-size: 14px;
-    color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .live-dot {
-      &.active {
-        background-color: red;
-      }
-      height: 8px;
-      width: 8px;
-      background-color: #000;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 5px;
-    }
-  }
-
-  .code-display {
-    margin-top: 10px;
-    font-size: 18px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    width: 150px;
-    background-color: transparent;
-    border-radius: 4px;
-    color: #888;
-  }
 }

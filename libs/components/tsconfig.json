@@ -1,31 +1,18 @@
 {
   "compilerOptions": {
     "target": "es2022",
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "paths": {
-      "@app/*": ["apps/frontend/src/app/*"],
-      "@core/*": ["apps/frontend/src/app/core/*"],
-      "@models/*": ["apps/frontend/src/app/core/models/*"],
-      "@features/*": ["apps/frontend/src/app/features/*"],
-      "@services/*": ["apps/frontend/src/app/core/services/*"],
-      "@ui/components": ["libs/components/src/index.ts"],
-      "@helpers": ["libs/helpers/src/index.ts"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
   "files": [],
   "include": [],
   "references": [
     {
-      "path": "./tsconfig.editor.json"
-    },
-    {
-      "path": "./tsconfig.app.json"
+      "path": "./tsconfig.lib.json"
     },
     {
       "path": "./tsconfig.spec.json"

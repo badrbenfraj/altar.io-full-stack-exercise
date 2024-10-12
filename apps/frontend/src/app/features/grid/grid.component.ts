@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScreenComponent } from '@core/screens/screen.component';
 import { GridService } from '@services/grid.service';
+import { LiveComponent } from '@ui/components';
 
 @Component({
-  selector: 'app-grid',
+  selector: 'ac-grid',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LiveComponent],
   providers: [],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
