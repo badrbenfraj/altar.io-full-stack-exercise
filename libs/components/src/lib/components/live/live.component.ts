@@ -26,5 +26,5 @@ export class LiveComponent {
    * @public
    * @optional
    */
-  @Input() code: string | undefined;
+  @Input() code = '';
 }
