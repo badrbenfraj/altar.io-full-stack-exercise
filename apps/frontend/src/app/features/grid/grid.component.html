@@ -17,7 +17,9 @@
       <i class="fas fa-clock"></i>
       <!-- Clock icon -->
     </div>
-    <button (click)="generateGrid()" [disabled]="generationStarted" class="col-md-2 generate-btn">Generate 2D Grid</button>
+    <button id="generateButton" (click)="generateGrid()" [disabled]="generationStarted" class="col-md-2 generate-btn">
+      Generate 2D Grid
+    </button>
   </div>
 
   <div *ngIf="grid.length; else emptyGrid" class="grid">
