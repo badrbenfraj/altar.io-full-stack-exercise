@@ -8,6 +8,10 @@
     }
   ],
   "compilerOptions": {
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@app/*": ["apps/backend/src/app/*"],
+      "@helpers": ["libs/helpers/src/index.ts"]
+    }
   }
 }
