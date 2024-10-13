@@ -42,54 +42,57 @@ jobs:
 
       # Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm add -g pnpm
+          npm add -g nx@19
+          pnpm install
 
       # Lint backend
       - name: lint backend
-        run: npx nx run backend:lint
+        run: nx run backend:lint
 
       # Lint frontend
       - name: lint frontend
-        run: npx nx run frontend:lint
+        run: nx run frontend:lint
 
       # Test frontend and backend
       - name: test backend
-        run: npx nx run backend:test
+        run: nx run backend:test
 
       - name: test frontend
-        run: npx nx run frontend:test
+        run: nx run frontend:test
 
       # Test helpers library
       - name: test helpers library
-        run: npx nx run helpers:test
+        run: nx run helpers:test
 
       # Test ui components library
       - name: test ui components library
-        run: npx nx run components:test
+        run: nx run components:test
 
       # Test e2e backend
       - name: test e2e backend
-        run: npx nx run backend-e2e:e2e
+        run: nx run backend-e2e:e2e
 
       # Test e2e frontend
       - name: test e2e frontend
-        run: npx nx run frontend-e2e:e2e
+        run: nx run frontend-e2e:e2e
 
       # Build helpers library
       - name: build helpers library
-        run: npx nx run helpers:build
+        run: nx run helpers:build
 
       # Build backend (NestJS)
       - name: Build backend
-        run: npx nx run backend:build
+        run: nx run backend:build
 
       # Build backend (NestJS)
       - name: Build backend
-        run: npx nx run backend:build
+        run: nx run backend:build
 
       # Build frontend (Angular)
       - name: Build frontend
-        run: npx nx run frontend:build
+        run: nx run frontend:build
 
       # Log into Docker Hub or GitHub Container Registry
       - name: Log in to Docker Hub
