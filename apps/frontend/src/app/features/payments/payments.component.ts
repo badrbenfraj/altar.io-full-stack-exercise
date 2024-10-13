@@ -1,11 +1,9 @@
-import { Component, inject } from '@angular/core';
-import { PaymentsService } from '@services/payments.service';
-import { SharedModule } from '@app/shared/shared.module';
+import { Component, inject, OnInit } from '@angular/core';
 import { ScreenComponent } from '@app/core/screens/screen.component';
-import { GridService } from '@app/core/services/grid.service';
-import { take, takeUntil } from 'rxjs';
-import { startGridGeneration } from '@helpers/utils';
+import { WebsocketService } from '@app/core/services/websocket.service';
+import { SharedModule } from '@app/shared/shared.module';
 import { Code, Grid, GridCode, Payments } from '@helpers/models';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'ac-payments',
@@ -14,16 +12,11 @@ import { Code, Grid, GridCode, Payments } from '@helpers/models';
   templateUrl: './payments.component.html',
   styleUrl: './payments.component.scss'
 })
-export class PaymentsComponent extends ScreenComponent {
+export class PaymentsComponent extends ScreenComponent implements OnInit {
   /**
    * Payments service to interact with the API
    */
-  paymentsService = inject(PaymentsService);
-
-  /**
-   * Grid service to interact with the API
-   */
-  gridService = inject(GridService);
+  websocketService = inject(WebsocketService);
 
   /**
    * Payments list
@@ -55,8 +48,7 @@ export class PaymentsComponent extends ScreenComponent {
    */
   generationStarted = false;
 
-  constructor() {
-    super();
+  ngOnInit() {
     this.loadPayments();
     this.startGeneration();
   }
@@ -64,48 +56,46 @@ export class PaymentsComponent extends ScreenComponent {
   addPayment(): void {
     if (this.isAddReadOnly()) return;
 
-    const newPayment = {
-      name: this.paymentName,
-      amount: this.paymentAmount as number,
-      code: this.code,
-      grid: this.grid
-    };
-
-    this.paymentsService
-      .addPayment(newPayment)
-      .pipe(take(1))
-      .subscribe(() => {
-        this.loadPayments();
-      });
-
-    // Reset form fields
-    this.paymentName = '';
-    this.paymentAmount = undefined;
+    if (this.paymentAmount !== undefined) {
+      const newPayment: Payments = {
+        name: this.paymentName,
+        amount: this.paymentAmount,
+        code: this.code,
+        grid: this.grid
+      };
+      this.websocketService.addPayment(newPayment);
+      // Reset form fields
+      this.paymentName = '';
+      this.paymentAmount = undefined;
+    } else {
+      console.error('Payment amount is undefined');
+    }
   }
 
-  // Load the payment list from the API
   loadPayments(): void {
-    this.paymentsService
-      .getPayments()
-      .pipe(take(1))
-      .subscribe((data: Payments[]) => {
-        this.payments = data;
-      });
+    this.websocketService.onPayments().subscribe((payments: unknown) => {
+      this.payments = payments as Payments[];
+    });
   }
 
   startGeneration(): void {
+    if (this.generationStarted) return;
     this.generationStarted = true;
-    startGridGeneration(this.gridService)
+    this.websocketService
+      .onGenerationStart()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: ({ grid, code }: GridCode) => {
-          this.grid = grid;
-          this.code = code;
+        next: (value: unknown) => {
+          const gridCode = value as GridCode;
+          this.code = gridCode.code;
+          this.grid = gridCode.grid;
         },
         error: () => {
           this.generationStarted = false;
         }
       });
+
+    this.websocketService.startGeneration();
   }
 
   isAddReadOnly(): boolean {

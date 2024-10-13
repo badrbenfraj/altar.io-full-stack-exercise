@@ -4,6 +4,9 @@ import { AppController } from '@app/app.controller';
 import { AppService } from '@app/app.service';
 import { GridModule } from '@app/grid/grid.module';
 import { PaymentsModule } from '@app/payments/payments.module';
+import { AppGateway } from './app.gateway';
+import { GridService } from '@app/grid/services/grid.service';
+import { PaymentsService } from '@app/payments/services/payments.service';
 // import { Payments } from '@app/payments/entities/payment.entity';
 
 @Module({
@@ -23,6 +26,6 @@ import { PaymentsModule } from '@app/payments/payments.module';
     PaymentsModule
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService, AppGateway, GridService, PaymentsService]
 })
 export class AppModule {}
