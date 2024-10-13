@@ -46,12 +46,13 @@ pnpm nx serve backend
 
 This will run the API server on http://localhost:3000.
 
-Running Tests
+## Running Tests
+
 The project includes unit and end-to-end tests for both the frontend and backend.
 
 1. Unit Tests
 
-   Frontend:
+#### Frontend:
 
 ```bash
 pnpm nx run frontend:test
@@ -88,8 +89,9 @@ Frontend E2E (Cypress):
 pnpm nx run frontend-e2e:e2e
 ```
 
-Storybook for UI Components
-Storybook is used to showcase and develop UI components in isolation. To start Storybook for your project:
+## Storybook for UI Components
+
+Storybook is used to showcase and develop UI components in isolation. To start Storybook for the project:
 
 ```bash
 pnpm nx run components:storybook
@@ -97,7 +99,8 @@ pnpm nx run components:storybook
 
 This will run Storybook on http://localhost:6006.
 
-Building the Project
+## Building the Project
+
 Before deploying the project, ensure you build both the backend and frontend.
 
 1. Build Frontend (Angular)
@@ -116,62 +119,23 @@ Before deploying the project, ensure you build both the backend and frontend.
 
    The built files will be located in dist/apps/backend.
 
-Docker Setup
-The project can be containerized using Docker. To build and run the containers:
+## CI/CD with GitHub Actions
 
-1. Build Docker Images
-   Run the following command to build the Docker images for both the frontend and backend:
-
-```bash
-docker build -t your_dockerhub_username/frontend:latest -f ./apps/frontend/Dockerfile .
-docker build -t your_dockerhub_username/backend:latest -f ./apps/backend/Dockerfile .
-```
-
-2. Run Docker Containers
-   Once the images are built, you can run the containers:
-
-```bash
-docker run -d -p 80:80 your_dockerhub_username/frontend:latest
-docker run -d -p 3000:3000 your_dockerhub_username/backend:latest
-```
-
-The frontend will be available at http://localhost and the backend at http://localhost:3000.
-
-CI/CD with GitHub Actions
 This project is configured with GitHub Actions for CI/CD. The workflow runs on every push or pull request to the main branch and performs the following tasks:
 
-Lints the code (both frontend and backend).
-Runs unit tests (both frontend and backend).
-Runs end-to-end tests.
-Builds the frontend and backend.
-Builds Docker images for both frontend and backend and pushes them to Docker Hub (or any other registry).
-Optionally, you can set up deployment to a server or cloud.
-Secrets Required
-To enable Docker image pushing, you need to set up the following secrets in your GitHub repository:
+- Lints the code (both frontend and backend).
+- Runs unit tests (both frontend and backend).
+- Runs end-to-end tests.
+- Builds the frontend and backend.
+- Builds Docker images for both frontend and backend and pushes them to Docker Hub (or any other registry).
 
-DOCKER_USERNAME: Your Docker Hub username.
-DOCKER_PASSWORD: Your Docker Hub password (or an access token).
-To add these secrets:
+## Additional Commands
 
-Go to your GitHub repository.
-Click on Settings.
-In the left sidebar, click Secrets > Actions.
-Click New repository secret and add the above secrets.
-How the GitHub Actions Workflow Works:
-The workflow performs the following steps:
+### Linting
 
-Checkout Code: Retrieves the latest code from the repository.
-Install Dependencies: Installs all project dependencies using pnpm.
-Linting: Lints both frontend and backend.
-Testing: Runs unit tests for frontend, backend, and libraries, and E2E tests for both frontend and backend.
-Builds: Builds both the backend and frontend.
-Docker: Logs into Docker Hub, builds Docker images for frontend and backend, and pushes them to Docker Hub.
-(Optional) Deployment step to your server or cloud environment.
-Additional Commands
-Linting
-To lint your code, run:
+To lint the code, run:
 
-Frontend:
+#### Frontend:
 
 ```bash
 pnpm nx run frontend:lint
@@ -183,8 +147,9 @@ Backend:
 pnpm nx run backend:lint
 ```
 
-Generate Code Coverage Reports
-Frontend:
+### Generate Code Coverage Reports
+
+#### Frontend:
 
 ```bash
 pnpm nx run frontend:test --code-coverage
@@ -197,3 +162,30 @@ pnpm nx run backend:test --code-coverage
 ```
 
 The coverage reports will be generated in the coverage directory.
+
+## Keycloak Integration
+
+This project uses Keycloak for authentication and authorization. Keycloak provides centralized identity management with features such as Single Sign-On (SSO), user federation, and role-based access control.
+
+The backend (NestJS) is secured using Keycloak, and the frontend (Angular) uses the Keycloak Angular adapter for managing authentication tokens and securing routes.
+You can manage users, roles, and permissions directly in the Keycloak Admin Console.
+For local development, Keycloak runs as a Docker container using Docker Compose.
+
+Docker Compose
+The project uses Docker Compose to orchestrate multiple services, including the frontend (Angular), backend (NestJS), PostgreSQL, Adminer, and Keycloak.
+
+PostgreSQL is used as the database service and runs on the default port 5432.
+Adminer is a simple web-based database management tool and is available at port 8090 for easy database management.
+You can run all these services using the following command:
+
+```bash
+docker-compose up --build
+```
+
+This command will:
+
+- Build and start the frontend on http://localhost.
+- Start the backend on http://localhost:3000.
+- Run PostgreSQL on its default port (5432).
+- Make Adminer available at http://localhost:8090 for managing the PostgreSQL database.
+- Run Keycloak on http://localhost:8080, where you can access the Keycloak Admin Console.
