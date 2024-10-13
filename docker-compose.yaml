@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./apps/backend
+    environment:
+      DATABASE_URL: postgres://username:password@db:5432/altar
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+      - keycloak
+    networks:
+      - app-network
+
+  db:
+    image: postgres:16.3
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.5
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command: start-dev
+    ports:
+      - '8080:8080'
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    networks:
+      - app-network
+
+  adminer:
+    image: adminer
+    ports:
+      - '8090:8080'
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+  keycloak_data:
+
+networks:
+  app-network:
+    driver: bridge

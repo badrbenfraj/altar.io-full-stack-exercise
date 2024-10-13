@@ -1,23 +1,21 @@
-# Use the official Node.js image as the base image
-FROM node:18.19.1
+# Use the official Node.js image
+FROM node:18-alpine
 
-# Set the working directory inside the container
-WORKDIR /app
+# Create a directory for the app
+WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+# Copy the package files and install dependencies
+COPY package.json pnpm-lock.yaml ./
+RUN npm install -g pnpm && pnpm install
 
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code to the working directory
+# Copy the rest of the app's code
 COPY . .
 
-# Build the project
-RUN npm run build
+# Build the app
+RUN pnpm build
 
-# Expose the port the app runs on
+# Expose the application port
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "run", "start:prod"]
+# Start the NestJS app
+CMD ["pnpm", "start:prod"]
