@@ -1,7 +1,7 @@
 import { SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Subject, takeUntil } from 'rxjs';
-import { Grid } from '@helpers/models';
+import { GridCode } from '@helpers/models';
 import { GridService } from '@app/grid/services/grid.service';
 import { PaymentsService } from '@app/payments/services/payments.service';
 import { startGridGeneration } from '@helpers/utils';
@@ -48,7 +48,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       startGridGeneration(this.gridService, () => this.bias)
         .pipe(takeUntil(subject))
         .subscribe({
-          next: (gridCode) => {
+          next: (gridCode: GridCode) => {
             this.server.emit('generationStarted', gridCode);
           },
           error: (error) => {
