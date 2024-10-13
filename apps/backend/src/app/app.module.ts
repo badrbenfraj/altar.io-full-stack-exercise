@@ -8,7 +8,7 @@ import { PaymentsModule } from '@app/modules/payments/payments.module';
 import { AppGateway } from './app.gateway';
 import { GridService } from '@app/modules/grid/services/grid.service';
 import { APP_GUARD } from '@nestjs/core';
-import { TypeOrmModule } from '@nestjs/typeorm';
+// import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthGuard, KeycloakConnectModule, RoleGuard } from 'nest-keycloak-connect';
 import { ConfigModule } from '@nestjs/config';
 
@@ -17,8 +17,8 @@ import { configModule } from '@app/core/config';
 import { KeycloakConfigService } from '@app/modules/keycloak/keycloak-config.service';
 import { KeycloakConfigModule } from '@app/modules/keycloak/keycloak.module';
 import { KeycloakService } from './modules/keycloak/keycloak.service';
-import { Payments } from '@app/modules/payments/entities/payment.entity';
-import { join } from 'path';
+// import { Payments } from '@app/modules/payments/entities/payment.entity';
+// import { join } from 'path';
 
 @Module({
   imports: [
@@ -27,23 +27,22 @@ import { join } from 'path';
       imports: [KeycloakConfigModule],
       useExisting: KeycloakConfigService
     }),
-
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'username',
-      password: 'password',
-      database: 'altar',
-      autoLoadEntities: true,
-      migrationsRun: true,
-      migrations: [join(__dirname, 'backend/database/src/lib/migrations/**/*.ts')],
-      migrationsTableName: 'migration',
-      synchronize: true,
-      logging: true,
-      logger: 'file'
-    }),
-    TypeOrmModule.forFeature([Payments]),
+    // TypeOrmModule.forRoot({
+    //   type: 'postgres',
+    //   host: 'localhost',
+    //   port: 5432,
+    //   username: 'username',
+    //   password: 'password',
+    //   database: 'altar',
+    //   autoLoadEntities: true,
+    //   migrationsRun: true,
+    //   migrations: [join(__dirname, 'backend/database/src/lib/migrations/**/*.ts')],
+    //   migrationsTableName: 'migration',
+    //   synchronize: true,
+    //   logging: true,
+    //   logger: 'file'
+    // }),
+    // TypeOrmModule.forFeature([Payments]),
     GridModule,
     PaymentsModule
   ],
