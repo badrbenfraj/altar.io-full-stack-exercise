@@ -1,24 +1,26 @@
 # Stage 1: Build the Angular app
-FROM node:18-alpine AS build
+FROM node:lts-Hydrogen AS build
 
 WORKDIR /app
 
-COPY package.json ./
+COPY ../../package.json ./
 
-COPY pnpm-lock.yaml ./
+RUN npm install -g pnpm
 
-RUN npm install -g pnpm && pnpm install
+RUN npm install -g nx@19
+
+RUN pnpm install --prod=true --ignore-scripts
 
 COPY . .
 
-RUN pnpm build --prod
+CMD ["nx", "run", "frontend:build"]
 
 # Stage 2: Serve the app using Nginx
 FROM nginx:alpine
 
-COPY --from=build /app/dist/apps/frontend /usr/share/nginx/html
+COPY --from=build /app/dist/apps/frontend/browser/* /usr/share/nginx/html
 
-COPY --from=build /app/apps/frontend/nginx.conf /etc/nginx/nginx.conf  # Copy nginx.conf from the frontend project
+COPY --from=build /app/apps/frontend/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 

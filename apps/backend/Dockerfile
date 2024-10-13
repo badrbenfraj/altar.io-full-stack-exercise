@@ -1,21 +1,23 @@
 # Use the official Node.js image
-FROM node:18-alpine
+FROM node:lts-Hydrogen
 
 # Create a directory for the app
 WORKDIR /usr/src/app
 
 # Copy the package files and install dependencies
-COPY package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install
+COPY ../../package.json ./
+
+RUN npm install -g pnpm
+
+RUN npm install -g nx
+
+RUN pnpm install --prod=true --ignore-scripts
 
 # Copy the rest of the app's code
 COPY . .
-
-# Build the app
-RUN pnpm build
 
 # Expose the application port
 EXPOSE 3000
 
 # Start the NestJS app
-CMD ["pnpm", "start:prod"]
+CMD ["nx", "serve", "backend"]
