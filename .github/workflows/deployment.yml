@@ -1,0 +1,116 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:19.03.12
+        options: --privileged
+
+    steps:
+      # Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      # Cache dependencies
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            apps/backend/node_modules
+            apps/frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Lint backend
+      - name: lint backend
+        run: npx nx run backend:lint
+
+      # Lint frontend
+      - name: lint frontend
+        run: npx nx run frontend:lint
+
+      # Test frontend and backend
+      - name: test backend
+        run: npx nx run backend:test
+
+      - name: test frontend
+        run: npx nx run frontend:test
+
+      # Test helpers library
+      - name: test helpers library
+        run: npx nx run helpers:test
+
+      # Test ui components library
+      - name: test ui components library
+        run: npx nx run components:test
+
+      # Test e2e backend
+      - name: test e2e backend
+        run: npx nx run backend-e2e:e2e
+
+      # Test e2e frontend
+      - name: test e2e frontend
+        run: npx nx run frontend-e2e:e2e
+
+      # Build helpers library
+      - name: build helpers library
+        run: npx nx run helpers:build
+
+      # Build backend (NestJS)
+      - name: Build backend
+        run: npx nx run backend:build
+
+      # Build backend (NestJS)
+      - name: Build backend
+        run: npx nx run backend:build
+
+      # Build frontend (Angular)
+      - name: Build frontend
+        run: npx nx run frontend:build
+
+      # Log into Docker Hub or GitHub Container Registry
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Build and tag Docker images for backend and frontend
+      - name: Build Docker images
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:latest -f ./apps/frontend/Dockerfile .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:latest -f ./apps/backend/Dockerfile .
+
+      # Push Docker images to the registry
+      - name: Push Docker images
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/backend:latest
+
+      # Deploy the images to a server or cloud
+      # - name: Deploy to server
+      #   run: |
+      #     ssh user@server "docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest && docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest && docker-compose up -d"
