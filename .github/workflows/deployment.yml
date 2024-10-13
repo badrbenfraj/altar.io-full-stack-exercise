@@ -42,7 +42,7 @@ jobs:
 
       # Install dependencies
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       # Lint backend
       - name: lint backend
