@@ -1,82 +1,191 @@
-# AltarIoFullStackExercise
+# Nx Monorepo Project (Frontend + Backend)
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+This project is a monorepo setup using **Nx** that includes an **Angular** frontend (`frontend`), a **NestJS** backend (`backend`), and shared libraries. The project also uses **Storybook** to showcase components and **Cypress** for end-to-end testing.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+## Prerequisites
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+- **Node.js**: Ensure that you have **Node.js (v18 or later)** installed.
+- **pnpm**: We use **pnpm** as the package manager.
+- **Docker**: Docker is required for building and running the containerized versions of the frontend and backend.
 
-## Finish your CI setup
+## Setup
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/jgwnzdzDaf)
+Clone the repository:
 
-
-## Run tasks
-
-To run the dev server for your app, use:
-
-```sh
-npx nx serve backend
+```bash
+git clone <repository_url>
+cd <repository_folder>
 ```
 
-To create a production bundle:
+Install dependencies:
 
-```sh
-npx nx build backend
+```bash
+npm install -g pnpm
+pnpm install
 ```
 
-To see all available targets to run for a project, run:
+## Starting the Project
 
-```sh
-npx nx show project backend
-```
-        
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+1. Frontend (Angular)
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+   To serve the Angular frontend:
 
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/nest:app demo
+```bash
+pnpm nx serve frontend
 ```
 
-To generate a new library, use:
+This will serve the app on http://localhost:4200.
 
-```sh
-npx nx g @nx/node:lib mylib
+2. Backend (NestJS)
+
+   To run the NestJS backend:
+
+```bash
+pnpm nx serve backend
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+This will run the API server on http://localhost:3000.
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Running Tests
 
+The project includes unit and end-to-end tests for both the frontend and backend.
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+1. Unit Tests
 
-## Install Nx Console
+#### Frontend:
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+```bash
+pnpm nx run frontend:test
+```
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Backend:
 
-## Useful links
+```bash
+pnpm nx run backend:test
+```
 
-Learn more:
+Helpers Library:
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+pnpm nx run helpers:test
+```
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+UI Components Library:
+
+```bash
+pnpm nx run components:test
+```
+
+2. End-to-End (E2E) Tests
+   Backend E2E:
+
+```bash
+pnpm nx run backend-e2e:e2e
+```
+
+Frontend E2E (Cypress):
+
+```bash
+pnpm nx run frontend-e2e:e2e
+```
+
+## Storybook for UI Components
+
+Storybook is used to showcase and develop UI components in isolation. To start Storybook for the project:
+
+```bash
+pnpm nx run components:storybook
+```
+
+This will run Storybook on http://localhost:6006.
+
+## Building the Project
+
+Before deploying the project, ensure you build both the backend and frontend.
+
+1. Build Frontend (Angular)
+
+   ```bash
+   pnpm nx run frontend:build
+   ```
+
+   The built files will be located in dist/apps/frontend.
+
+2. Build Backend (NestJS)
+
+   ```bash
+   pnpm nx run backend:build
+   ```
+
+   The built files will be located in dist/apps/backend.
+
+## CI/CD with GitHub Actions
+
+This project is configured with GitHub Actions for CI/CD. The workflow runs on every push or pull request to the main branch and performs the following tasks:
+
+- Lints the code (both frontend and backend).
+- Runs unit tests (both frontend and backend).
+- Runs end-to-end tests.
+- Builds the frontend and backend.
+- Builds Docker images for both frontend and backend and pushes them to Docker Hub (or any other registry).
+
+## Additional Commands
+
+### Linting
+
+To lint the code, run:
+
+#### Frontend:
+
+```bash
+pnpm nx run frontend:lint
+```
+
+Backend:
+
+```bash
+pnpm nx run backend:lint
+```
+
+### Generate Code Coverage Reports
+
+#### Frontend:
+
+```bash
+pnpm nx run frontend:test --code-coverage
+```
+
+Backend:
+
+```bash
+pnpm nx run backend:test --code-coverage
+```
+
+The coverage reports will be generated in the coverage directory.
+
+## Keycloak Integration
+
+This project uses Keycloak for authentication and authorization. Keycloak provides centralized identity management with features such as Single Sign-On (SSO), user federation, and role-based access control.
+
+The backend (NestJS) is secured using Keycloak, and the frontend (Angular) uses the Keycloak Angular adapter for managing authentication tokens and securing routes.
+You can manage users, roles, and permissions directly in the Keycloak Admin Console.
+For local development, Keycloak runs as a Docker container using Docker Compose.
+
+Docker Compose
+The project uses Docker Compose to orchestrate multiple services, including the frontend (Angular), backend (NestJS), PostgreSQL, Adminer, and Keycloak.
+
+PostgreSQL is used as the database service and runs on the default port 5432.
+Adminer is a simple web-based database management tool and is available at port 8090 for easy database management.
+You can run all these services using the following command:
+
+```bash
+docker-compose up --build
+```
+
+This command will:
+
+- Build and start the frontend on http://localhost.
+- Start the backend on http://localhost:3000.
+- Run PostgreSQL on its default port (5432).
+- Make Adminer available at http://localhost:8090 for managing the PostgreSQL database.
+- Run Keycloak on http://localhost:8080, where you can access the Keycloak Admin Console.
