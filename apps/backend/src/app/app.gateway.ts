@@ -1,12 +1,16 @@
 import { SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { RoleGuard, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
+import { Logger, UseGuards } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { Subject, takeUntil } from 'rxjs';
 import { GridCode } from '@helpers/models';
-import { GridService } from '@app/grid/services/grid.service';
-import { PaymentsService } from '@app/payments/services/payments.service';
+import { GridService } from '@app/modules/grid/services/grid.service';
+import { PaymentsService } from '@app/modules/payments/services/payments.service';
+import { Payments } from '@app/modules/payments/entities/payment.entity';
 import { startGridGeneration } from '@helpers/utils';
-import { Payments } from './payments/entities/payment.entity';
+import { WSAuthGuard } from '@app/core/auth/ws.guard';
 
+@UseGuards(WSAuthGuard, RoleGuard)
 @WebSocketGateway({
   cors: {
     origin: '*',
@@ -26,12 +30,12 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {}
 
   handleConnection(client: Socket) {
-    console.log(`Client connected: ${client.id}`);
+    Logger.log(`Client connected: ${client.id}`);
     this.clientSubjects.set(client.id, new Subject<boolean>());
   }
 
   handleDisconnect(client: Socket) {
-    console.log(`Client disconnected: ${client.id}`);
+    Logger.log(`Client disconnected: ${client.id}`);
     const subject = this.clientSubjects.get(client.id);
     if (subject) {
       subject.next(true);
@@ -41,6 +45,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
+  @Roles({ roles: ['user'], mode: RoleMatchingMode.ANY })
   @SubscribeMessage('startGeneration')
   handleStartGenerator(client: Socket): void {
     const subject = this.clientSubjects.get(client.id);
@@ -55,7 +60,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
             console.error('Error starting grid generator', error);
           },
           complete: () => {
-            console.log('Grid generation complete');
+            Logger.log('Grid generation complete');
           }
         });
     }

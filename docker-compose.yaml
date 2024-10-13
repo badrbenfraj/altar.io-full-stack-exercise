@@ -31,7 +31,7 @@ services:
     environment:
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydb
+      POSTGRES_DB: altar
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
