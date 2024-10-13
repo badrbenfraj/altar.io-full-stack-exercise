@@ -189,3 +189,43 @@ This command will:
 - Run PostgreSQL on its default port (5432).
 - Make Adminer available at http://localhost:8090 for managing the PostgreSQL database.
 - Run Keycloak on http://localhost:8080, where you can access the Keycloak Admin Console.
+
+## Project Formatting and Commit Rules
+
+This project follows specific guidelines for code formatting, linting, and commit message conventions to maintain code quality and consistency across the repository.
+
+1. Code Formatting
+   We use Prettier for code formatting. Prettier ensures that all code adheres to a consistent style.
+   To automatically format your code before committing, a pre-commit hook is configured. This means that any code you commit will be automatically formatted with Prettier.
+2. Linting Rules
+   ESLint is used to analyze code for potential errors and enforce coding standards.
+
+Linting rules are set up to ensure code quality and adherence to best practices.
+
+You can manually run the linter with the following command:
+
+```bash
+pnpm nx run frontend:lint
+pnpm nx run backend:lint
+```
+
+3. Commit Message Guidelines
+   This project follows the Conventional Commits specification, which provides a standardized way to write commit messages. This format includes:
+   A type (feat, fix, docs, style, refactor, perf, test, chore)
+   An optional scope (the part of the codebase affected)
+   A description that briefly summarizes the change
+   Example of a commit message:
+
+```bash
+feat(frontend): add new payment form validation
+```
+
+4. Setting Up Pre-commit Hook with Husky
+   The pre-commit hook is managed using Husky, which runs the Prettier formatting before each commit. Ensure you have Husky installed:
+
+```bash
+pnpm add husky --save-dev
+npx husky install
+```
+
+Once installed, Husky will automatically set up the pre-commit and commit-msg hook to format the code using Prettier apply conventional commit message.
