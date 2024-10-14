@@ -8,11 +8,10 @@ import { GridService } from '@app/modules/grid/services/grid.service';
 import { PaymentsService } from '@app/modules/payments/services/payments.service';
 import { Payments } from '@app/modules/payments/entities/payment.entity';
 import { startGridGeneration } from '@helpers/utils';
-// import { WSAuthGuard } from './core/auth/ws.guard';
-// import { WSAuthGuard } from '@app/core/auth/ws.guard';
+import { WSAuthGuard } from '@app/core/auth/ws.guard';
 
 // @UseGuards(WSAuthGuard, RoleGuard)
-// @UseGuards(WSAuthGuard)
+@UseGuards(WSAuthGuard)
 @WebSocketGateway({
   cors: {
     origin: '*',

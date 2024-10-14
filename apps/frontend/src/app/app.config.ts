@@ -7,6 +7,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import { AuthInterceptor } from '@app/core/auth/auth.interceptor';
 import { KeycloakInitService } from '@app/core/auth/keycloak.service';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+import { KeycloakService } from 'keycloak-angular';
 
 function initializeKeycloak(keycloakInitService: KeycloakInitService): () => Promise<boolean> {
   return () => keycloakInitService.initKeycloak();
@@ -16,7 +17,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     KeycloakInitService,
     AuthInterceptor,
-    ErrorInterceptor,
+    KeycloakService,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
@@ -28,6 +29,7 @@ export const appConfig: ApplicationConfig = {
       useClass: AuthInterceptor,
       multi: true
     },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideHttpClient(),

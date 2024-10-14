@@ -12,7 +12,6 @@ export class WSAuthGuard implements CanActivate {
     }
     const client = context.switchToWs().getClient();
     const request = client.handshake;
-    console.log(request.headers);
     const token = this.keycloakService.extractToken(request);
 
     if (!token) {

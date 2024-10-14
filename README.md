@@ -1,16 +1,3 @@
-## WebSocket Authorization
-
-**Note:** The current implementation is missing the Authorization header when making WebSocket connections from the frontend. To secure WebSocket connections in the backend, the Authorization header needs to be sent from the frontend app to the backend WebSocket server with the Bearer token to have a fully secured application but other then this everything should be works fine.
-
-thats why I commented out the Auth guard for websocket gateway.
-
-```ts
-// import { WSAuthGuard } from '@app/core/auth/ws.guard';
-
-// @UseGuards(WSAuthGuard, RoleGuard)
-// @UseGuards(WSAuthGuard)
-```
-
 ## Table of Contents
 
 1. [Project Overview](#nx-monorepo-project-frontend--backend)
@@ -41,6 +28,7 @@ thats why I commented out the Auth guard for websocket gateway.
 14. [Keycloak Integration](#keycloak-integration)
     - [Create a Role Named user](#1-create-a-Role-named-user)
     - [Configure the admin-cli Client](#2-configure-the-admin-cli-client)
+    - [Configure Client Scopes](#3-configure-client-scopes)
 15. [Project Formatting and Commit Rules](#project-formatting-and-commit-rules)
     - [Code Formatting](#1-code-formatting)
     - [Linting Rules](#2-linting-rules)
@@ -435,6 +423,10 @@ The coverage reports will be generated in the coverage directory.
 ## Keycloak Integration
 
 This project uses Keycloak for authentication and authorization. Keycloak provides centralized identity management with features such as Single Sign-On (SSO), user federation, and role-based access control.
+The default user is admin for the admin-cli client with:
+
+- **Username:** admin
+- **password:** admin
 
 The backend (NestJS) is secured using Keycloak, and the frontend (Angular) uses the Keycloak Angular adapter for managing authentication tokens and securing routes.
 You can manage users, roles, and permissions directly in the Keycloak Admin Console.
@@ -443,8 +435,9 @@ For local development, Keycloak runs as a Docker container using Docker Compose.
 Docker Compose
 The project uses Docker Compose to orchestrate multiple services, including the frontend (Angular), backend (NestJS), PostgreSQL, Adminer, and Keycloak.
 
-PostgreSQL is used as the database service and runs on the default port 5432.
-Adminer is a simple web-based database management tool and is available at port 8090 for easy database management.
+**PostgreSQL** is used as the database service and runs on the default port 5432 with **username:** username and **password:** password.
+**Adminer** is a simple web-based database management tool and is available at port 8090 for easy database management.
+
 You can run all these services using the following command:
 
 ```bash
@@ -461,7 +454,8 @@ This command will:
 
 ## Keycloak Configuration
 
-This project uses Keycloak for authentication and role-based access control. Before running the project, you need to configure Keycloak as follows:
+This project uses Keycloak for authentication and role-based access control.
+Before running the project, you need to configure Keycloak as follows:
 
 ### 1. Create a Role Named user
 
@@ -472,6 +466,31 @@ This project uses Keycloak for authentication and role-based access control. Bef
 - Set the Role Name to user and click Save.
 
 ### 2. Configure the admin-cli Client
+
+To configure the admin-cli client, follow these steps:
+
+In the Keycloak Admin Console, navigate to Clients.
+
+Select the admin-cli client from the list.
+
+Under Settings > Access settings, configure the following fields:
+
+**Root URL:**
+http://localhost
+
+**Home URL:**
+http://localhost
+
+**Valid Redirect URIs:**
+http://localhost/\*
+
+**Web Origins:**
+
+-
+
+Ensure that these values are saved correctly to allow the frontend (running on http://localhost) to communicate with the Keycloak server.
+
+### 3. Configure Client Scopes
 
 - In the Keycloak Admin Console, navigate to Clients.
 - Select the admin-cli client from the list.
