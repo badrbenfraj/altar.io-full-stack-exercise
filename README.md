@@ -34,6 +34,7 @@
     - [Linting Rules](#2-linting-rules)
     - [Commit Message Guidelines](#3-commit-message-guidelines)
     - [Setting Up Pre-commit Hook with Husky](#4-setting-up-pre-commit-hook-with-husky)
+16. [Troubleshooting Generation Issues in Docker](#Troubleshooting-Generation-Issues-in-Docker)
 
 # Nx Monorepo Project (Frontend + Backend)
 
@@ -544,3 +545,45 @@ npx husky install
 ```
 
 Once installed, Husky will automatically set up the pre-commit and commit-msg hook to format the code using Prettier apply conventional commit message.
+
+# Troubleshooting Generation Issues in Docker
+
+In case the generation functionality does not work when the project is served with Docker, you can try the following steps to resolve the issue:
+
+**Stop the frontend and backend Docker services:**
+
+**Run the following command to stop frontend services:**
+
+```bash
+docker compose stop frontend
+```
+
+**Run the following command to stop backend services:**
+
+```bash
+docker compose stop backend
+```
+
+## Serve the frontend and backend locally using Nx:
+
+**Serve the frontend (Angular) using Nx:**
+
+```bash
+pnpm nx serve frontend
+```
+
+Serve the backend (NestJS) using Nx:
+
+```bash
+pnpm nx serve backend
+```
+
+**Keep Keycloak running in Docker:**
+
+Ensure that Keycloak continues to run inside Docker, as it is necessary for authentication:
+
+```bash
+docker compose up keycloak
+```
+
+This approach allows you to run the application locally while maintaining Keycloak authentication within Docker.
