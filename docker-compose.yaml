@@ -1,14 +1,15 @@
-version: '3.8'
-
 services:
   frontend:
     build:
       context: .
       dockerfile: apps/frontend/Dockerfile
-    ports:
-      - '80:80'
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     depends_on:
       - backend
+    ports:
+      - '80:80'
     networks:
       - app-network
 
@@ -16,6 +17,9 @@ services:
     build:
       context: .
       dockerfile: apps/backend/Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     environment:
       DATABASE_URL: postgres://username:password@db:5432/altar
     ports:
@@ -62,6 +66,7 @@ services:
 volumes:
   postgres_data:
   keycloak_data:
+  node_modules:
 
 networks:
   app-network:
