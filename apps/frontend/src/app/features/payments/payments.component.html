@@ -1,0 +1,44 @@
+<div class="container payment-page">
+  <!-- Live Status Section -->
+  <ac-live [code]="code" [generationStarted]="generationStarted"></ac-live>
+
+  <!-- Payment Form -->
+  <div class="payment-form mb-4">
+    <div class="gx-3 d-flex align-items-end">
+      <div class="col-md-3">
+        <label for="paymentName">Payment</label>
+        <input id="paymentName" type="text" class="form-control" placeholder="Payment" [(ngModel)]="paymentName" />
+      </div>
+      <div class="col-md-3 mx-3">
+        <label for="paymentAmount">Amount</label>
+        <input id="paymentAmount" type="number" class="form-control" placeholder="Amount" [(ngModel)]="paymentAmount" />
+      </div>
+      <button type="button" class="btn btn-add" [disabled]="isAddReadOnly()" (click)="addPayment()">
+        <span class="fa fa-plus"></span>
+        ADD
+      </button>
+    </div>
+  </div>
+
+  <!-- Payment List Table -->
+  <div class="table-responsive payment-list">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th class="col-6">NAME</th>
+          <th class="col-2">AMOUNT</th>
+          <th class="col-2">CODE</th>
+          <th class="col-2">GRID</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payment of payments">
+          <td class="col-6">{{ payment.name }}</td>
+          <td class="col-2">{{ payment.amount }}</td>
+          <td class="col-2">{{ payment.code }}</td>
+          <td class="col-2">{{ payment.grid.flat().length }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
