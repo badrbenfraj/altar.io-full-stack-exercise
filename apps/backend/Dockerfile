@@ -1,23 +1,20 @@
-# Use the official Node.js image
-FROM node:lts-Hydrogen
+# Base image for backend
+FROM node:lts-hydrogen AS build
 
-# Create a directory for the app
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copy the package files and install dependencies
+# Copy package.json and pnpm-lock.yaml
 COPY ../../package.json ./
+COPY ../../pnpm-lock.yaml ./
 
+# Install pnpm and dependencies
 RUN npm install -g pnpm
+RUN pnpm install --ignore-scripts
 
-RUN npm install -g nx
-
-RUN pnpm install --prod=true --ignore-scripts
-
-# Copy the rest of the app's code
+# Copy the backend source code
 COPY . .
 
-# Expose the application port
-EXPOSE 3000
+# Build the backend (replace with your actual build command)
+RUN npm run build:backend
 
-# Start the NestJS app
-CMD ["nx", "serve", "backend"]
+CMD ["node", "dist/apps/backend/main.js"]
