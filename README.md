@@ -1,6 +1,6 @@
 ## WebSocket Authorization
 
-**Note:** The current implementation is missing the Authorization header when making WebSocket connections from the frontend. To secure WebSocket connections, the Authorization header needs to be sent from the frontend app to the backend WebSocket server with the Bearer token.
+**Note:** The current implementation is missing the Authorization header when making WebSocket connections from the frontend. To secure WebSocket connections in the backend, the Authorization header needs to be sent from the frontend app to the backend WebSocket server with the Bearer token to have a fully secured application but other then this everything should be works fine.
 
 thats why I commented out the Auth guard for websocket gateway.
 
