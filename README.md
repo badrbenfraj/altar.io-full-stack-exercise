@@ -1,3 +1,16 @@
+## WebSocket Authorization
+
+**Note:** The current implementation is missing the Authorization header when making WebSocket connections from the frontend. To secure WebSocket connections, the Authorization header needs to be sent from the frontend app to the backend WebSocket server with the Bearer token.
+
+thats why I commented out the Auth guard for websocket gateway.
+
+```ts
+// import { WSAuthGuard } from '@app/core/auth/ws.guard';
+
+// @UseGuards(WSAuthGuard, RoleGuard)
+// @UseGuards(WSAuthGuard)
+```
+
 ## Table of Contents
 
 1. [Project Overview](#nx-monorepo-project-frontend--backend)
@@ -24,10 +37,11 @@
 12. [Additional Commands](#additional-commands)
     - [Linting](#linting)
     - [Generate Code Coverage Reports](#generate-code-coverage-reports)
-13. [Troubleshooting](#troubleshooting)
-14. [Conclusion](#conclusion)
-15. [Keycloak Integration](#keycloak-integration)
-16. [Project Formatting and Commit Rules](#project-formatting-and-commit-rules)
+13. [Conclusion](#conclusion)
+14. [Keycloak Integration](#keycloak-integration)
+    - [Create a Role Named user](#1-create-a-Role-named-user)
+    - [Configure the admin-cli Client](#2-configure-the-admin-cli-client)
+15. [Project Formatting and Commit Rules](#project-formatting-and-commit-rules)
     - [Code Formatting](#1-code-formatting)
     - [Linting Rules](#2-linting-rules)
     - [Commit Message Guidelines](#3-commit-message-guidelines)
@@ -281,9 +295,8 @@ nx show project frontend --web --open=true
 
 ## Starting the Project
 
-### 1. Frontend (Angular)
-
-To serve the Angular frontend:
+###Frontend (Angular)
+serve the Angular frontend:
 
 ```bash
 pnpm nx serve frontend
@@ -445,6 +458,28 @@ This command will:
 - Run PostgreSQL on its default port (5432).
 - Make Adminer available at http://localhost:8090 for managing the PostgreSQL database.
 - Run Keycloak on http://localhost:8080, where you can access the Keycloak Admin Console.
+
+## Keycloak Configuration
+
+This project uses Keycloak for authentication and role-based access control. Before running the project, you need to configure Keycloak as follows:
+
+### 1. Create a Role Named user
+
+- Go to the Keycloak Admin Console (http://localhost:8080).
+- Select your realm (e.g., myrealm).
+- Navigate to Roles from the left menu.
+- Click Add Role.
+- Set the Role Name to user and click Save.
+
+### 2. Configure the admin-cli Client
+
+- In the Keycloak Admin Console, navigate to Clients.
+- Select the admin-cli client from the list.
+- Go to the Client Scopes section.
+- Select admin-cli-dedicated.
+- Ensure that the Full Scope Allowed setting is activated by setting it to On.
+
+This configuration ensures that users assigned to the user role have the proper scope allowed for interacting with the APIs protected by Keycloak.
 
 ## Project Formatting and Commit Rules
 

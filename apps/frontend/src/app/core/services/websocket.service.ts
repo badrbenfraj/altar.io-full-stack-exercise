@@ -36,6 +36,7 @@ export class WebsocketService {
   }
 
   onGenerationStart() {
+    this.connectWithToken();
     return this.socket.fromEvent('generationStarted');
   }
 

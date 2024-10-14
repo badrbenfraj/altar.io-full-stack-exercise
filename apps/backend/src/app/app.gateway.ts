@@ -1,5 +1,5 @@
 import { SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
-import { RoleGuard, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
+// import { RoleGuard, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
 import { Logger, UseGuards } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { Subject, takeUntil } from 'rxjs';
@@ -8,9 +8,11 @@ import { GridService } from '@app/modules/grid/services/grid.service';
 import { PaymentsService } from '@app/modules/payments/services/payments.service';
 import { Payments } from '@app/modules/payments/entities/payment.entity';
 import { startGridGeneration } from '@helpers/utils';
-import { WSAuthGuard } from '@app/core/auth/ws.guard';
+// import { WSAuthGuard } from './core/auth/ws.guard';
+// import { WSAuthGuard } from '@app/core/auth/ws.guard';
 
-@UseGuards(WSAuthGuard, RoleGuard)
+// @UseGuards(WSAuthGuard, RoleGuard)
+// @UseGuards(WSAuthGuard)
 @WebSocketGateway({
   cors: {
     origin: '*',
@@ -45,7 +47,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  @Roles({ roles: ['user'], mode: RoleMatchingMode.ANY })
+  // @Roles({ roles: ['user'], mode: RoleMatchingMode.ANY })
   @SubscribeMessage('startGeneration')
   handleStartGenerator(client: Socket): void {
     const subject = this.clientSubjects.get(client.id);
