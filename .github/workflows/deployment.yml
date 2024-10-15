@@ -49,50 +49,50 @@ jobs:
 
       # Lint backend
       - name: lint backend
-        run: npx nx run backend:lint --verbose
+        run: npx nx run backend:lint --verbose --no-cloud
 
       # Lint frontend
       - name: lint frontend
-        run: npx nx run frontend:lint --verbose
+        run: npx nx run frontend:lint --verbose --no-cloud
 
       # Test frontend and backend
       - name: test backend
-        run: npx nx run backend:test --verbose
+        run: npx nx run backend:test --verbose --no-cloud
 
       - name: test frontend
-        run: npx nx run frontend:test --verbose
+        run: npx nx run frontend:test --verbose --no-cloud
 
       # Test helpers library
       - name: test helpers library
-        run: npx nx run helpers:test --verbose
+        run: npx nx run helpers:test --verbose --no-cloud
 
       # Test ui components library
       - name: test ui components library
-        run: npx nx run components:test --verbose
+        run: npx nx run components:test --verbose --no-cloud
 
       # Test e2e backend
       - name: test e2e backend
-        run: npx nx run backend-e2e:e2e --verbose
+        run: npx nx run backend-e2e:e2e --verbose --no-cloud
 
       # Test e2e frontend
       - name: test e2e frontend
-        run: npx nx run frontend-e2e:e2e --verbose
+        run: npx nx run frontend-e2e:e2e --verbose --no-cloud
 
       # Build helpers library
       - name: build helpers library
-        run: npx nx run helpers:build --verbose
+        run: npx nx run helpers:build --verbose --no-cloud
 
       # Build backend (NestJS)
       - name: Build backend
-        run: npx nx run backend:build --verbose
+        run: npx nx run backend:build --verbose --no-cloud
 
       # Build backend (NestJS)
       - name: Build backend
-        run: npx nx run backend:build --verbose
+        run: npx nx run backend:build --verbose --no-cloud
 
       # Build frontend (Angular)
       - name: Build frontend
-        run: npx nx run frontend:build --verbose
+        run: npx nx run frontend:build --verbose --no-cloud
 
       # Log into Docker Hub or GitHub Container Registry
       - name: Log in to Docker Hub
