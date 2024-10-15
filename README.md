@@ -39,7 +39,9 @@
 This project is a monorepo setup using **Nx** that includes an **Angular** frontend (`frontend`), a **NestJS** backend (`backend`), and shared libraries. The project also uses **Storybook** to showcase components and **Cypress** for end-to-end testing.
 
 - Application routes
+
   **Payments page:** http://localhost:4200/payments or http://localhost/payments.
+
   **Grid page:** http://localhost:4200/grid or http://localhost/grid.
 
 ## Prerequisites
