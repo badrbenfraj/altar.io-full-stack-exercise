@@ -20,7 +20,14 @@
     ],
     "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
   },
-  "nxCloudId": "6706ddfad9e21f051e244a0a",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "useCloud": false
+      }
+    }
+  },
   "plugins": [
     {
       "plugin": "@nx/webpack/plugin",

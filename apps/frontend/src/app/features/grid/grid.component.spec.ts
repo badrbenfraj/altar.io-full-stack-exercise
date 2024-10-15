@@ -1,73 +1,99 @@
-import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { Observable, of } from 'rxjs';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GridComponent } from './grid.component';
-import { GridService } from '@services/grid.service';
+import { GridService } from '@app/core/services/grid.service';
+import { of, throwError, Subject } from 'rxjs';
+import { startGridGeneration } from '@helpers/utils';
+import { By } from '@angular/platform-browser';
 import { SharedModule } from '@app/shared/shared.module';
+
+jest.mock('@helpers/utils', () => ({
+  startGridGeneration: jest.fn()
+}));
 
 describe('GridComponent', () => {
   let component: GridComponent;
   let fixture: ComponentFixture<GridComponent>;
-  let gridServiceMock: {
-    getGrid: jest.Mock<Observable<string[][]>, [string]>;
-    getSecretCode: jest.Mock<Observable<string>, [string[][]]>;
-  };
+  let gridServiceMock: Partial<GridService>;
+  let destroy$: Subject<boolean>;
 
   beforeEach(async () => {
     gridServiceMock = {
-      getGrid: jest.fn().mockReturnValue(
-        of([
-          ['a', 'b'],
-          ['c', 'd']
-        ])
-      ),
-      getSecretCode: jest.fn().mockReturnValue(of('12'))
+      getGrid: jest.fn(),
+      getSecretCode: jest.fn()
     };
 
     await TestBed.configureTestingModule({
       imports: [SharedModule],
       providers: [{ provide: GridService, useValue: gridServiceMock }]
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(GridComponent);
     component = fixture.componentInstance;
+    destroy$ = new Subject<boolean>();
+    component['destroy$'] = destroy$;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should generate grid and code when generateGrid is called', fakeAsync(() => {
+  it('should generate grid and code when generateGrid is called', () => {
+    const mockGrid = [
+      ['a', 'b'],
+      ['c', 'd']
+    ];
+    const mockCode = 'abcd';
+    (startGridGeneration as jest.Mock).mockReturnValue(of({ grid: mockGrid, code: mockCode }));
+
     component.character = 'a';
     component.generateGrid();
 
-    tick(1000);
-    fixture.detectChanges();
-    // Ensure the gridService methods were called
-    expect(gridServiceMock.getGrid).toHaveBeenCalled();
-    expect(gridServiceMock.getSecretCode).toHaveBeenCalledWith([
-      ['a', 'b'],
-      ['c', 'd']
-    ]);
+    expect(startGridGeneration).toHaveBeenCalledWith(gridServiceMock, expect.any(Function));
+    expect(component.grid).toEqual(mockGrid);
+    expect(component.code).toEqual(mockCode);
+    expect(component.generationStarted).toBe(true);
+    expect(component.inputDisabled).toBe(true);
+  });
 
-    // Ensure the component's grid and code are updated
-    expect(component.grid).toEqual([
-      ['a', 'b'],
-      ['c', 'd']
-    ]);
-    expect(component.code).toEqual('12');
-    // complete the observable and clear timers then ensure there are no pending timers
-    fixture.destroy();
-    flush();
-  }));
+  it('should handle error when generateGrid is called', () => {
+    (startGridGeneration as jest.Mock).mockReturnValue(throwError('error'));
 
-  it('should disable input when character length is 1', () => {
     component.character = 'a';
     component.generateGrid();
-    fixture.detectChanges();
 
-    expect(component.inputDisabled).toBeTruthy();
+    expect(startGridGeneration).toHaveBeenCalledWith(gridServiceMock, expect.any(Function));
+    expect(component.generationStarted).toBe(false);
+    expect(component.inputDisabled).toBe(true);
+  });
+
+  it('should not generate grid if generation is already started', () => {
+    component.generationStarted = true;
+    component.generateGrid();
+
+    expect(startGridGeneration).not.toHaveBeenCalled();
+  });
+
+  it('should disable input if character length is 1', () => {
+    const disableInputSpy = jest.spyOn(component, 'disableInput');
+    component.character = 'a';
+    component.generateGrid();
+
+    expect(disableInputSpy).toHaveBeenCalled();
+  });
+
+  it('should not disable input if character length is not 1', () => {
+    const disableInputSpy = jest.spyOn(component, 'disableInput');
+    component.character = 'ab';
+    component.generateGrid();
+
+    expect(disableInputSpy).not.toHaveBeenCalled();
   });
 
   it('should allow only alphabets and delete keys in input', () => {

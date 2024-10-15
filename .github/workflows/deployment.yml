@@ -1,0 +1,137 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:19.03.12
+        options: --privileged
+
+    steps:
+      # Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      # Cache dependencies
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            apps/backend/node_modules
+            apps/frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          npm add -g pnpm
+          npm add -g nx@19
+          pnpm install
+
+      # Lint backend
+      - name: lint backend
+        run: npx nx run backend:lint --verbose --no-cloud
+
+      # Lint frontend
+      - name: lint frontend
+        run: npx nx run frontend:lint --verbose --no-cloud
+
+      # Test frontend and backend
+      - name: test backend
+        run: npx nx run backend:test --verbose --no-cloud
+
+      - name: test frontend
+        run: npx nx run frontend:test --verbose --no-cloud
+
+      # Test helpers library
+      - name: test helpers library
+        run: npx nx run helpers:test --verbose --no-cloud
+
+      # Test ui components library
+      - name: test ui components library
+        run: npx nx run components:test --verbose --no-cloud
+
+      # Run backend
+      - name: run backend
+        run: |
+          npx nx serve backend --verbose --no-cloud > /dev/null 2>&1 &
+          echo "Waiting for backend to be ready..."
+          timeout 60 sh -c 'until nc -zv localhost 3000; do sleep 1; done'
+        env:
+          PORT: 3000
+
+      # Run frontend
+      - name: run frontend
+        run: |
+          npx nx serve frontend --verbose --no-cloud > /dev/null 2>&1 &
+          echo "Waiting for frontend to be ready..."
+          timeout 60 sh -c 'until nc -zv localhost 4200; do sleep 1; done'
+        env:
+          PORT: 4200
+
+      # Test e2e backend
+      - name: test e2e backend
+        run: npx nx run backend-e2e:e2e --verbose --no-cloud
+
+      # Test e2e frontend
+      - name: test e2e frontend
+        run: npx nx run frontend-e2e:e2e --verbose --no-cloud
+
+      # Build helpers library
+      - name: build helpers library
+        run: npx nx run helpers:build --verbose --no-cloud
+
+      # Build backend (NestJS)
+      - name: Build backend
+        run: npx nx run backend:build --verbose --no-cloud
+
+      # Build backend (NestJS)
+      - name: Build backend
+        run: npx nx run backend:build --verbose --no-cloud
+
+      # Build frontend (Angular)
+      - name: Build frontend
+        run: npx nx run frontend:build --verbose --no-cloud
+
+      # Log into Docker Hub or GitHub Container Registry
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # # Build and tag Docker images for backend and frontend
+      # - name: Build Docker images
+      #   run: |
+      #     docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:latest -f ./apps/frontend/Dockerfile .
+      #     docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:latest -f ./apps/backend/Dockerfile .
+
+      # Push Docker images to the registry
+      # - name: Push Docker images
+      #   run: |
+      #     docker push ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+      #     docker push ${{ secrets.DOCKER_USERNAME }}/backend:latest
+
+      # Deploy the images to a server or cloud
+      # - name: Deploy to server
+      #   run: |
+      #     ssh user@server "docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest && docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest && docker-compose up -d"

@@ -8,7 +8,7 @@ describe('LiveComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LiveComponent]
+      imports: [LiveComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LiveComponent);
@@ -27,6 +27,7 @@ describe('LiveComponent', () => {
 
   it('should display the code', () => {
     component.code = '1234';
+    component.generationStarted = true;
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
     expect(compiled.querySelector('.code-display span').textContent).toContain('Your Code: 1234');
