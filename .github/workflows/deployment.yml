@@ -49,50 +49,50 @@ jobs:
 
       # Lint backend
       - name: lint backend
-        run: npx nx run backend:lint
+        run: npx nx run backend:lint --verbose
 
       # Lint frontend
       - name: lint frontend
-        run: npx nx run frontend:lint
+        run: npx nx run frontend:lint --verbose
 
       # Test frontend and backend
       - name: test backend
-        run: npx nx run backend:test
+        run: npx nx run backend:test --verbose
 
       - name: test frontend
-        run: npx nx run frontend:test
+        run: npx nx run frontend:test --verbose
 
       # Test helpers library
       - name: test helpers library
-        run: npx nx run helpers:test
+        run: npx nx run helpers:test --verbose
 
       # Test ui components library
       - name: test ui components library
-        run: npx nx run components:test
+        run: npx nx run components:test --verbose
 
       # Test e2e backend
       - name: test e2e backend
-        run: npx nx run backend-e2e:e2e
+        run: npx nx run backend-e2e:e2e --verbose
 
       # Test e2e frontend
       - name: test e2e frontend
-        run: npx nx run frontend-e2e:e2e
+        run: npx nx run frontend-e2e:e2e --verbose
 
       # Build helpers library
       - name: build helpers library
-        run: npx nx run helpers:build
+        run: npx nx run helpers:build --verbose
 
       # Build backend (NestJS)
       - name: Build backend
-        run: npx nx run backend:build
+        run: npx nx run backend:build --verbose
 
       # Build backend (NestJS)
       - name: Build backend
-        run: npx nx run backend:build
+        run: npx nx run backend:build --verbose
 
       # Build frontend (Angular)
       - name: Build frontend
-        run: npx nx run frontend:build
+        run: npx nx run frontend:build --verbose
 
       # Log into Docker Hub or GitHub Container Registry
       - name: Log in to Docker Hub
