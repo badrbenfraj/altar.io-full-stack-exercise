@@ -72,13 +72,19 @@ jobs:
 
       # Run backend
       - name: run backend
-        run: npx nx serve backend --verbose --no-cloud
+        run: |
+          npx nx serve backend --verbose --no-cloud > /dev/null 2>&1 &
+          echo "Waiting for backend to be ready..."
+          timeout 60 sh -c 'until nc -zv localhost 3000; do sleep 1; done'
         env:
           PORT: 3000
 
       # Run frontend
       - name: run frontend
-        run: npx nx serve frontend --verbose --no-cloud
+        run: |
+          npx nx serve frontend --verbose --no-cloud > /dev/null 2>&1 &
+          echo "Waiting for frontend to be ready..."
+          timeout 60 sh -c 'until nc -zv localhost 4200; do sleep 1; done'
         env:
           PORT: 4200
 
