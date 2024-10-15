@@ -8,6 +8,7 @@
 6. [Starting the Project](#starting-the-project)
    - [Frontend (Angular)](#1-frontend-angular)
    - [Backend (NestJS)](#2-backend-nestjs)
+   - [Starting project with docker](#3-starting-project-with-docker)
 7. [Running Tests](#running-tests)
    - [Unit Tests](#1-unit-tests)
    - [End-to-End (E2E) Tests](#2-end-to-end-e2e-tests)
@@ -36,6 +37,12 @@
 # Nx Monorepo Project (Frontend + Backend)
 
 This project is a monorepo setup using **Nx** that includes an **Angular** frontend (`frontend`), a **NestJS** backend (`backend`), and shared libraries. The project also uses **Storybook** to showcase components and **Cypress** for end-to-end testing.
+
+- Application routes
+
+  **Payments page:** http://localhost:4200/payments or http://localhost/payments.
+
+  **Grid page:** http://localhost:4200/grid or http://localhost/grid.
 
 ## Prerequisites
 
@@ -301,6 +308,16 @@ pnpm nx serve backend
 
 This will run the API server on http://localhost:3000.
 
+### 3. Starting project with docker
+
+To start the project with docker run the following command:
+
+```bash
+docker compose up --build
+```
+
+This will serve the app on http://localhost and will run the API server on http://localhost:3000.
+
 ## Running Tests
 
 The project includes unit and end-to-end tests for both the frontend and backend.
@@ -435,7 +452,7 @@ Adminer is a simple web-based database management tool and is available at port 
 You can run all these services using the following command:
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 This command will:
