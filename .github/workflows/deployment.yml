@@ -70,6 +70,18 @@ jobs:
       - name: test ui components library
         run: npx nx run components:test --verbose --no-cloud
 
+      # Run backend
+      - name: run backend
+        run: npx nx serve backend --verbose --no-cloud
+        env:
+          PORT: 3000
+
+      # Run frontend
+      - name: run frontend
+        run: npx nx serve frontend --verbose --no-cloud
+        env:
+          PORT: 4200
+
       # Test e2e backend
       - name: test e2e backend
         run: npx nx run backend-e2e:e2e --verbose --no-cloud
@@ -95,23 +107,23 @@ jobs:
         run: npx nx run frontend:build --verbose --no-cloud
 
       # Log into Docker Hub or GitHub Container Registry
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Build and tag Docker images for backend and frontend
-      - name: Build Docker images
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:latest -f ./apps/frontend/Dockerfile .
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:latest -f ./apps/backend/Dockerfile .
+      # # Build and tag Docker images for backend and frontend
+      # - name: Build Docker images
+      #   run: |
+      #     docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:latest -f ./apps/frontend/Dockerfile .
+      #     docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:latest -f ./apps/backend/Dockerfile .
 
       # Push Docker images to the registry
-      - name: Push Docker images
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/frontend:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/backend:latest
+      # - name: Push Docker images
+      #   run: |
+      #     docker push ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+      #     docker push ${{ secrets.DOCKER_USERNAME }}/backend:latest
 
       # Deploy the images to a server or cloud
       # - name: Deploy to server
