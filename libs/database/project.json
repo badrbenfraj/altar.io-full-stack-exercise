@@ -31,7 +31,15 @@
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "command": "ts-node --project tsconfig.lib.json ../../node_modules/typeorm/cli -d ../../libs/helpers/src/lib/config/orm.config.ts",
+        "command": "ts-node --project tsconfig.lib.json ../../node_modules/typeorm/cli -d ./src/lib/orm.config.ts",
+        "cwd": "libs/database"
+      }
+    },
+    "mig-create": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "ts-node --project tsconfig.lib.json -r tsconfig-paths/register ../../node_modules/typeorm/cli migration:create src/lib/migrations",
         "cwd": "libs/database"
       }
     },
@@ -39,7 +47,7 @@
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "command": "ts-node --project tsconfig.lib.json -r tsconfig-paths/register ../../node_modules/typeorm/cli migration:generate -d ../../libs/helpers/src/lib/config/orm.config.ts --pretty src/lib/migrations/migration",
+        "command": "ts-node --project tsconfig.lib.json -r tsconfig-paths/register ../../node_modules/typeorm/cli migration:generate -d ./src/lib/orm.config.ts --pretty src/lib/migrations",
         "cwd": "libs/database"
       }
     },
@@ -47,7 +55,7 @@
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "command": "ts-node --project tsconfig.lib.json -r tsconfig-paths/register ../../node_modules/typeorm/cli migration:run -d ../../libs/helpers/src/lib/config/orm.config.ts",
+        "command": "ts-node --project tsconfig.lib.json -r tsconfig-paths/register ../../node_modules/typeorm/cli migration:run -d ./src/lib/orm.config.ts",
         "cwd": "libs/database"
       }
     },

@@ -1,8 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { join } from 'path';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
-import { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_SYNC, DB_USER } from '../constants';
+import { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_SYNC, DB_USER } from '@helpers/constants';
 
 export const ormConfig: TypeOrmModuleOptions = {
   type: 'postgres',
