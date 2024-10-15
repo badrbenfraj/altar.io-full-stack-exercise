@@ -28,11 +28,6 @@ export class GridComponent extends ScreenComponent {
 
   constructor() {
     super();
-  }
-
-  generateGrid(): void {
-    if (this.generationStarted) return;
-    this.generationStarted = true;
 
     this.websocketService
       .onGenerationStart()
@@ -48,6 +43,11 @@ export class GridComponent extends ScreenComponent {
           this.inputDisabled = false;
         }
       });
+  }
+
+  generateGrid(): void {
+    if (this.generationStarted) return;
+    this.generationStarted = true;
 
     if (this.character.length === 1) {
       this.disableInput();
@@ -63,8 +63,8 @@ export class GridComponent extends ScreenComponent {
     const isAlphabet = /[a-z]/i.test(key);
 
     if (isAlphabet && !isDeleteKey) {
-      this.websocketService.updateBias(key);
       if (this.generationStarted) {
+        this.websocketService.updateBias(key);
         this.disableInput();
       }
       return true;
