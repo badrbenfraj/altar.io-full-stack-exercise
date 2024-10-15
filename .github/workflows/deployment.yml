@@ -49,50 +49,50 @@ jobs:
 
       # Lint backend
       - name: lint backend
-        run: nx run backend:lint
+        run: npx nx run backend:lint
 
       # Lint frontend
       - name: lint frontend
-        run: nx run frontend:lint
+        run: npx nx run frontend:lint
 
       # Test frontend and backend
       - name: test backend
-        run: nx run backend:test
+        run: npx nx run backend:test
 
       - name: test frontend
-        run: nx run frontend:test
+        run: npx nx run frontend:test
 
       # Test helpers library
       - name: test helpers library
-        run: nx run helpers:test
+        run: npx nx run helpers:test
 
       # Test ui components library
       - name: test ui components library
-        run: nx run components:test
+        run: npx nx run components:test
 
       # Test e2e backend
       - name: test e2e backend
-        run: nx run backend-e2e:e2e
+        run: npx nx run backend-e2e:e2e
 
       # Test e2e frontend
       - name: test e2e frontend
-        run: nx run frontend-e2e:e2e
+        run: npx nx run frontend-e2e:e2e
 
       # Build helpers library
       - name: build helpers library
-        run: nx run helpers:build
+        run: npx nx run helpers:build
 
       # Build backend (NestJS)
       - name: Build backend
-        run: nx run backend:build
+        run: npx nx run backend:build
 
       # Build backend (NestJS)
       - name: Build backend
-        run: nx run backend:build
+        run: npx nx run backend:build
 
       # Build frontend (Angular)
       - name: Build frontend
-        run: nx run frontend:build
+        run: npx nx run frontend:build
 
       # Log into Docker Hub or GitHub Container Registry
       - name: Log in to Docker Hub
