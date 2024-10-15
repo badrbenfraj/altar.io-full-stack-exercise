@@ -8,7 +8,7 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 
 import { AppModule } from './app/app.module';
-import { CORS } from '@app/core/constants';
+import { CORS } from '@helpers/constants';
 import { initSwagger } from '@app/app.swagger';
 
 async function bootstrap() {

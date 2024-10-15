@@ -6,7 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { GridCode } from '@helpers/models';
 import { GridService } from '@app/modules/grid/services/grid.service';
 import { PaymentsService } from '@app/modules/payments/services/payments.service';
-import { Payments } from '@app/modules/payments/entities/payment.entity';
+import { Payments } from '@database/entities/payments/payment.entity';
 import { startGridGeneration } from '@helpers/utils';
 import { WSAuthGuard } from '@app/core/auth/ws.guard';
 
