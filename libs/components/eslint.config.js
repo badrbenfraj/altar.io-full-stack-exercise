@@ -8,6 +8,7 @@ module.exports = [
   {
     files: ['**/*.ts'],
     rules: {
+      '@typescript-eslint/ban-ts-comment': 'off',
       '@angular-eslint/directive-selector': [
         'error',
         {
@@ -29,6 +30,8 @@ module.exports = [
   {
     files: ['**/*.html'],
     // Override or add rules here
-    rules: {}
+    rules: {
+      '@typescript-eslint/ban-ts-comment': 'off'
+    }
   }
 ];

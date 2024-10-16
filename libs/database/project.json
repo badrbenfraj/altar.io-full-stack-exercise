@@ -1,0 +1,71 @@
+{
+  "name": "database",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/database/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project database --web",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/database/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/database/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "typeorm": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "ts-node --project tsconfig.lib.json ../../node_modules/typeorm/cli -d ./src/lib/orm.config.ts",
+        "cwd": "libs/database"
+      }
+    },
+    "mig-create": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "ts-node --project tsconfig.lib.json -r tsconfig-paths/register ../../node_modules/typeorm/cli migration:create src/lib/migrations",
+        "cwd": "libs/database"
+      }
+    },
+    "mig-gen": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "ts-node --project tsconfig.lib.json -r tsconfig-paths/register ../../node_modules/typeorm/cli migration:generate -d ./src/lib/orm.config.ts --pretty src/lib/migrations",
+        "cwd": "libs/database"
+      }
+    },
+    "mig-run": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "ts-node --project tsconfig.lib.json -r tsconfig-paths/register ../../node_modules/typeorm/cli migration:run -d ./src/lib/orm.config.ts",
+        "cwd": "libs/database"
+      }
+    },
+    "mig-rev": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "nx run database:typeorm migration:revert",
+        "cwd": "libs/database"
+      }
+    }
+  }
+}

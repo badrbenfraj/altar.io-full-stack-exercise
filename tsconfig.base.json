@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@database": ["libs/database/src/index.ts"],
       "@helpers": ["libs/helpers/src/index.ts"]
     }
   },
