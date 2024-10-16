@@ -42,4 +42,4 @@ Thumbs.db
 .nx/workspace-data
 
 .angular
-./ormlogs.log
+ormlogs.log

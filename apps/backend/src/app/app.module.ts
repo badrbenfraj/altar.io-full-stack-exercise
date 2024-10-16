@@ -5,15 +5,11 @@ import { APP_GUARD } from '@nestjs/core';
 
 import { AppController } from '@app/app.controller';
 import { AppService } from '@app/app.service';
-import { GridModule } from '@app/modules/grid/grid.module';
-import { PaymentsModule } from '@app/modules/payments/payments.module';
+import { Modules } from '@app/modules';
 import { AppGateway } from './app.gateway';
-import { GridService } from '@app/modules/grid/services/grid.service';
-import { PaymentsService } from '@app/modules/payments/services/payments.service';
 import { configModule } from '@helpers/config';
 import { KeycloakConfigService } from '@app/modules/keycloak/keycloak-config.service';
 import { KeycloakConfigModule } from '@app/modules/keycloak/keycloak.module';
-import { KeycloakService } from './modules/keycloak/keycloak.service';
 import { DatabaseModule } from '@database/database.module';
 
 @Module({
@@ -24,16 +20,10 @@ import { DatabaseModule } from '@database/database.module';
       useExisting: KeycloakConfigService
     }),
     DatabaseModule,
-    GridModule,
-    PaymentsModule
+    ...Modules
   ],
   controllers: [AppController],
   providers: [
-    {
-      provide: KeycloakConfigService,
-      useClass: KeycloakConfigService,
-      scope: Scope.REQUEST
-    },
     {
       provide: APP_GUARD,
       useClass: AuthGuard
@@ -43,10 +33,7 @@ import { DatabaseModule } from '@database/database.module';
       useClass: RoleGuard
     },
     AppService,
-    AppGateway,
-    GridService,
-    KeycloakService,
-    PaymentsService
+    AppGateway
   ]
 })
 export class AppModule {}

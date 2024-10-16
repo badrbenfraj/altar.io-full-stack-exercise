@@ -4,14 +4,14 @@ import { BaseEntity } from '../base.entity';
 @Entity()
 export class Payments extends BaseEntity {
   @Column()
-  name: string;
+  name!: string;
 
   @Column('decimal')
-  amount: number;
+  amount!: number;
 
   @Column()
-  code: string;
+  code!: string;
 
   @Column('text', { array: true })
-  grid: string[][];
+  grid!: string[][];
 }

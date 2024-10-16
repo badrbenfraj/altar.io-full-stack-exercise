@@ -9,6 +9,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
+      "@entities/*": ["libs/database/src/lib/entities/*"],
       "@helpers/*": ["libs/helpers/src/lib/*"]
     }
   },

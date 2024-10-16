@@ -9,7 +9,8 @@ import { KeycloakService } from './keycloak.service';
       provide: KeycloakConfigService,
       useClass: KeycloakConfigService,
       scope: Scope.REQUEST
-    }
+    },
+    KeycloakService
   ],
   providers: [KeycloakConfigService, KeycloakService]
 })
