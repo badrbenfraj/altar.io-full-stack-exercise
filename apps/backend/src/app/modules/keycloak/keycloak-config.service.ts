@@ -5,7 +5,7 @@ import { KeycloakConnectOptions, KeycloakConnectOptionsFactory, TokenValidation 
 export class KeycloakConfigService implements KeycloakConnectOptionsFactory {
   createKeycloakConnectOptions(): KeycloakConnectOptions {
     return {
-      authServerUrl: 'http://localhost:8080',
+      authServerUrl: process.env.KEYCLOAK_HOST ? `http://${process.env.KEYCLOAK_HOST}:8080` : 'http://localhost:8080',
       realm: 'master',
       clientId: 'admin-cli',
       secret: '',

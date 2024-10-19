@@ -13,7 +13,7 @@ export class KeycloakService {
   }
 
   async validateToken(token: string): Promise<boolean> {
-    const keycloakUrl = 'http://localhost:8080';
+    const keycloakUrl = process.env.KEYCLOAK_HOST ? `http://${process.env.KEYCLOAK_HOST}:8080` : 'http://localhost:8080';
     const realm = 'master';
     const clientId = 'admin-cli';
 
