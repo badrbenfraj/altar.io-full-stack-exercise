@@ -4,7 +4,7 @@ import { PaymentsComponent } from '@features/payments/payments.component';
 import { AuthGuard } from '@app/core/auth/auth.guard';
 
 export const appRoutes: Route[] = [
-  { path: 'grid', component: GridComponent, canActivate: [AuthGuard], data: { roles: ['user'] } },
-  { path: 'payments', component: PaymentsComponent, canActivate: [AuthGuard], data: { roles: ['user'] } },
+  { path: 'grid', component: GridComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
+  { path: 'payments', component: PaymentsComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: '', redirectTo: 'grid', pathMatch: 'full' }
 ];

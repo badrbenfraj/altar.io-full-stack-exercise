@@ -19,22 +19,19 @@
     - [Build Docker Images](#1-build-docker-images)
     - [Run Docker Containers](#2-run-docker-containers)
 11. [CI/CD with GitHub Actions](#cicd-with-github-actions)
-    - [Secrets Required](#secrets-required)
-    - [How the GitHub Actions Workflow Works](#how-the-github-actions-workflow-works)
 12. [Additional Commands](#additional-commands)
     - [Linting](#linting)
     - [Generate Code Coverage Reports](#generate-code-coverage-reports)
-13. [Conclusion](#conclusion)
-14. [Keycloak Integration](#keycloak-integration)
-    - [Create a Role Named user](#1-create-a-Role-named-user)
-    - [Configure the admin-cli Client](#2-configure-the-admin-cli-client)
+13. [Keycloak Integration](#keycloak-integration)
+    - [Configure the admin-cli Client](#1-configure-the-admin-cli-client)
     - [Configure Client Scopes](#3-configure-client-scopes)
-15. [Project Formatting and Commit Rules](#project-formatting-and-commit-rules)
+14. [Project Formatting and Commit Rules](#project-formatting-and-commit-rules)
     - [Code Formatting](#1-code-formatting)
     - [Linting Rules](#2-linting-rules)
     - [Commit Message Guidelines](#3-commit-message-guidelines)
     - [Setting Up Pre-commit Hook with Husky](#4-setting-up-pre-commit-hook-with-husky)
-16. [Troubleshooting Generation Issues in Docker](#Troubleshooting-Generation-Issues-in-Docker)
+15. [Troubleshooting Generation Issues in Docker](#Troubleshooting-Generation-Issues-in-Docker)
+16. [Conclusion](#conclusion)
 
 # Nx Monorepo Project (Frontend + Backend)
 
@@ -458,15 +455,7 @@ This command will:
 This project uses Keycloak for authentication and role-based access control.
 Before running the project, you need to configure Keycloak as follows:
 
-### 1. Create a Role Named user
-
-- Go to the Keycloak Admin Console (http://localhost:8080).
-- Select your realm (e.g., myrealm).
-- Navigate to Roles from the left menu.
-- Click Add Role.
-- Set the Role Name to user and click Save.
-
-### 2. Configure the admin-cli Client
+### 1. Configure the admin-cli Client
 
 To configure the admin-cli client, follow these steps:
 
@@ -474,7 +463,9 @@ In the Keycloak Admin Console, navigate to Clients.
 
 Select the admin-cli client from the list.
 
-Under Settings > Access settings, configure the following fields:
+Under Settings select standard flow.
+
+Then under Settings > Access settings, configure the following fields:
 
 **Root URL:**
 http://localhost
@@ -485,9 +476,7 @@ http://localhost
 **Valid Redirect URIs:**
 http://localhost/\*
 
-**Web Origins:**
-
--
+**Web Origins:** \*
 
 Ensure that these values are saved correctly to allow the frontend (running on http://localhost) to communicate with the Keycloak server.
 
