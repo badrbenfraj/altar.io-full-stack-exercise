@@ -19,19 +19,19 @@
     - [Build Docker Images](#1-build-docker-images)
     - [Run Docker Containers](#2-run-docker-containers)
 11. [CI/CD with GitHub Actions](#cicd-with-github-actions)
-    - [Secrets Required](#secrets-required)
-    - [How the GitHub Actions Workflow Works](#how-the-github-actions-workflow-works)
 12. [Additional Commands](#additional-commands)
     - [Linting](#linting)
     - [Generate Code Coverage Reports](#generate-code-coverage-reports)
-13. [Troubleshooting](#troubleshooting)
-14. [Conclusion](#conclusion)
-15. [Keycloak Integration](#keycloak-integration)
-16. [Project Formatting and Commit Rules](#project-formatting-and-commit-rules)
+13. [Keycloak Integration](#keycloak-integration)
+    - [Configure the admin-cli Client](#1-configure-the-admin-cli-client)
+    - [Configure Client Scopes](#3-configure-client-scopes)
+14. [Project Formatting and Commit Rules](#project-formatting-and-commit-rules)
     - [Code Formatting](#1-code-formatting)
     - [Linting Rules](#2-linting-rules)
     - [Commit Message Guidelines](#3-commit-message-guidelines)
     - [Setting Up Pre-commit Hook with Husky](#4-setting-up-pre-commit-hook-with-husky)
+15. [Troubleshooting Generation Issues in Docker](#Troubleshooting-Generation-Issues-in-Docker)
+16. [Conclusion](#conclusion)
 
 # Nx Monorepo Project (Frontend + Backend)
 
@@ -281,9 +281,8 @@ nx show project frontend --web --open=true
 
 ## Starting the Project
 
-### 1. Frontend (Angular)
-
-To serve the Angular frontend:
+###Frontend (Angular)
+serve the Angular frontend:
 
 ```bash
 pnpm nx serve frontend
@@ -422,6 +421,10 @@ The coverage reports will be generated in the coverage directory.
 ## Keycloak Integration
 
 This project uses Keycloak for authentication and authorization. Keycloak provides centralized identity management with features such as Single Sign-On (SSO), user federation, and role-based access control.
+The default user is admin for the admin-cli client with:
+
+- **Username:** admin
+- **password:** admin
 
 The backend (NestJS) is secured using Keycloak, and the frontend (Angular) uses the Keycloak Angular adapter for managing authentication tokens and securing routes.
 You can manage users, roles, and permissions directly in the Keycloak Admin Console.
@@ -430,8 +433,9 @@ For local development, Keycloak runs as a Docker container using Docker Compose.
 Docker Compose
 The project uses Docker Compose to orchestrate multiple services, including the frontend (Angular), backend (NestJS), PostgreSQL, Adminer, and Keycloak.
 
-PostgreSQL is used as the database service and runs on the default port 5432.
-Adminer is a simple web-based database management tool and is available at port 8090 for easy database management.
+**PostgreSQL** is used as the database service and runs on the default port 5432 with **username:** username and **password:** password.
+**Adminer** is a simple web-based database management tool and is available at port 8090 for easy database management.
+
 You can run all these services using the following command:
 
 ```bash
@@ -445,6 +449,46 @@ This command will:
 - Run PostgreSQL on its default port (5432).
 - Make Adminer available at http://localhost:8090 for managing the PostgreSQL database.
 - Run Keycloak on http://localhost:8080, where you can access the Keycloak Admin Console.
+
+## Keycloak Configuration
+
+This project uses Keycloak for authentication and role-based access control.
+Before running the project, you need to configure Keycloak as follows:
+
+### 1. Configure the admin-cli Client
+
+To configure the admin-cli client, follow these steps:
+
+In the Keycloak Admin Console, navigate to Clients.
+
+Select the admin-cli client from the list.
+
+Under Settings select standard flow.
+
+Then under Settings > Access settings, configure the following fields:
+
+**Root URL:**
+http://localhost
+
+**Home URL:**
+http://localhost
+
+**Valid Redirect URIs:**
+http://localhost/\*
+
+**Web Origins:** \*
+
+Ensure that these values are saved correctly to allow the frontend (running on http://localhost) to communicate with the Keycloak server.
+
+### 3. Configure Client Scopes
+
+- In the Keycloak Admin Console, navigate to Clients.
+- Select the admin-cli client from the list.
+- Go to the Client Scopes section.
+- Select admin-cli-dedicated.
+- Ensure that the Full Scope Allowed setting is activated by setting it to On.
+
+This configuration ensures that users assigned to the user role have the proper scope allowed for interacting with the APIs protected by Keycloak.
 
 ## Project Formatting and Commit Rules
 
@@ -490,3 +534,45 @@ npx husky install
 ```
 
 Once installed, Husky will automatically set up the pre-commit and commit-msg hook to format the code using Prettier apply conventional commit message.
+
+# Troubleshooting Generation Issues in Docker
+
+In case the generation functionality does not work when the project is served with Docker, you can try the following steps to resolve the issue:
+
+**Stop the frontend and backend Docker services:**
+
+**Run the following command to stop frontend services:**
+
+```bash
+docker compose stop frontend
+```
+
+**Run the following command to stop backend services:**
+
+```bash
+docker compose stop backend
+```
+
+## Serve the frontend and backend locally using Nx:
+
+**Serve the frontend (Angular) using Nx:**
+
+```bash
+pnpm nx serve frontend
+```
+
+Serve the backend (NestJS) using Nx:
+
+```bash
+pnpm nx serve backend
+```
+
+**Keep Keycloak running in Docker:**
+
+Ensure that Keycloak continues to run inside Docker, as it is necessary for authentication:
+
+```bash
+docker compose up keycloak
+```
+
+This approach allows you to run the application locally while maintaining Keycloak authentication within Docker.

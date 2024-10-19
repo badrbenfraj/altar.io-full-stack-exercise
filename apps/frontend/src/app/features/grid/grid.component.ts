@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { ScreenComponent } from '@core/screens/screen.component';
-import { GridService } from '@services/grid.service';
 import { SharedModule } from '@app/shared/shared.module';
-import { startGridGeneration } from '@helpers/utils';
+import { WebsocketService } from '@app/core/services/websocket.service';
+import { GridCode } from '@helpers/models';
 
 @Component({
   selector: 'ac-grid',
@@ -14,7 +14,7 @@ import { startGridGeneration } from '@helpers/utils';
   styleUrl: './grid.component.scss'
 })
 export class GridComponent extends ScreenComponent {
-  gridService = inject(GridService);
+  websocketService = inject(WebsocketService);
 
   grid: string[][] = [];
 
@@ -26,16 +26,22 @@ export class GridComponent extends ScreenComponent {
 
   inputDisabled = false;
 
+  constructor() {
+    super();
+  }
+
   generateGrid(): void {
     if (this.generationStarted) return;
     this.generationStarted = true;
 
-    startGridGeneration(this.gridService, () => this.character)
+    this.websocketService
+      .onGenerationStart()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: ({ grid, code }) => {
-          this.grid = grid;
-          this.code = code;
+        next: (value: unknown) => {
+          const gridCode = value as GridCode;
+          this.code = gridCode.code;
+          this.grid = gridCode.grid;
         },
         error: () => {
           this.generationStarted = false;
@@ -46,6 +52,7 @@ export class GridComponent extends ScreenComponent {
     if (this.character.length === 1) {
       this.disableInput();
     }
+    this.websocketService.startGeneration();
   }
 
   alphabetsOnly(event: KeyboardEvent): boolean {
@@ -57,6 +64,7 @@ export class GridComponent extends ScreenComponent {
 
     if (isAlphabet && !isDeleteKey) {
       if (this.generationStarted) {
+        this.websocketService.updateBias(key);
         this.disableInput();
       }
       return true;

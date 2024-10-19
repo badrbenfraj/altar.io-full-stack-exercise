@@ -6,6 +6,7 @@ import { LiveComponent } from '@ui/components';
 
 @NgModule({
   imports: [CommonModule, RouterModule, FormsModule, LiveComponent],
+  providers: [],
   exports: [CommonModule, RouterModule, FormsModule, LiveComponent]
 })
 export class SharedModule {}
