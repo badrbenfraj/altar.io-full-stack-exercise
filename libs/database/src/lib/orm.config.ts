@@ -3,7 +3,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 
 import { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_SYNC, DB_USER } from '@helpers/constants';
 import { join } from 'path';
-import { Payments } from '@entities/payments/payment.entity';
+import { Payments } from './entities/payments/payment.entity';
 
 export const ormConfig: TypeOrmModuleOptions = {
   type: 'postgres',
