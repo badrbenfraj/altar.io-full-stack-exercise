@@ -95,7 +95,7 @@ export class PaymentsComponent extends ScreenComponent implements OnInit {
         }
       });
 
-    this.websocketService.startGeneration();
+    this.websocketService.startGeneration(true);
   }
 
   isAddReadOnly(): boolean {

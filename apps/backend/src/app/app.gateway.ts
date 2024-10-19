@@ -48,9 +48,12 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   // @Roles({ roles: ['user'], mode: RoleMatchingMode.ANY })
   @SubscribeMessage('startGeneration')
-  handleStartGenerator(client: Socket): void {
+  handleStartGenerator(client: Socket, isPayment: boolean): void {
     const subject = this.clientSubjects.get(client.id);
     if (subject) {
+      if (isPayment) {
+        this.paymentsService.getPayments().then((payments) => this.server.emit('paymentsUpdated', payments));
+      }
       startGridGeneration(this.gridService, () => this.bias)
         .pipe(takeUntil(subject))
         .subscribe({
@@ -74,8 +77,8 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('updatePayments')
   handleAddPayment(client: Socket, payment: Payments): void {
-    this.paymentsService.addPayment(payment);
-    const payments = this.paymentsService.getPayments();
-    this.server.emit('paymentsUpdated', payments);
+    this.paymentsService.addPayment(payment).then(() => {
+      this.paymentsService.getPayments().then((payments) => this.server.emit('paymentsUpdated', payments));
+    });
   }
 }

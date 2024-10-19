@@ -1,3 +1,4 @@
+import { KEYCLOAK_HOST, KEYCLOAK_PORT } from '@helpers/constants';
 import { Injectable } from '@nestjs/common';
 import { KeycloakConnectOptions, KeycloakConnectOptionsFactory, TokenValidation } from 'nest-keycloak-connect';
 
@@ -5,7 +6,7 @@ import { KeycloakConnectOptions, KeycloakConnectOptionsFactory, TokenValidation 
 export class KeycloakConfigService implements KeycloakConnectOptionsFactory {
   createKeycloakConnectOptions(): KeycloakConnectOptions {
     return {
-      authServerUrl: process.env.KEYCLOAK_HOST ? `http://${process.env.KEYCLOAK_HOST}:8080` : 'http://localhost:8080',
+      authServerUrl: `http://${KEYCLOAK_HOST}:${KEYCLOAK_PORT}`,
       realm: 'master',
       clientId: 'admin-cli',
       secret: '',

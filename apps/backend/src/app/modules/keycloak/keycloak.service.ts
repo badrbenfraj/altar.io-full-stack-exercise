@@ -1,3 +1,4 @@
+import { KEYCLOAK_HOST, KEYCLOAK_PORT } from '@helpers/constants';
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import * as jwt from 'jsonwebtoken';
@@ -13,7 +14,7 @@ export class KeycloakService {
   }
 
   async validateToken(token: string): Promise<boolean> {
-    const keycloakUrl = process.env.KEYCLOAK_HOST ? `http://${process.env.KEYCLOAK_HOST}:8080` : 'http://localhost:8080';
+    const keycloakUrl = `http://${KEYCLOAK_HOST}:${KEYCLOAK_PORT}`;
     const realm = 'master';
     const clientId = 'admin-cli';
 

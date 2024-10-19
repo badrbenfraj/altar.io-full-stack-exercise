@@ -27,7 +27,7 @@ export class WebsocketService {
   }
 
   // Send start generator signal
-  startGeneration() {
-    this.socket.emit('startGeneration');
+  startGeneration(isPayment = false) {
+    this.socket.emit('startGeneration', { isPayment });
   }
 }
